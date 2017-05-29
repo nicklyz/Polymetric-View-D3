@@ -1,0 +1,10 @@
+{
+  "name": "TestProj",
+  "version": "0.0.0",
+  "description": "translate mse parse output",
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "jsdom": "^11.0.0"
+  },
+  "author": "Daniel"
+}
