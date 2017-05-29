@@ -868,8 +868,12 @@ function update(source) {
         .on("click", click);
 
     nodeEnter.append("rect")
-        .attr("width", rectW)
-        .attr("height", rectH)
+        .attr("width", function (d) {
+          return d.data.metric.NOA;
+        })
+        .attr("height", function (d) {
+          return d.data.metric.NOM;
+        })
         .attr("stroke", "black")
         .attr("stroke-width", 1)
         .style("fill", function (d) {
@@ -917,8 +921,12 @@ function update(source) {
         .remove();
 
     nodeExit.select("rect")
-        .attr("width", rectW)
-        .attr("height", rectH)
+        .attr("width", function (d) {
+          return d.data.metric.NOA;
+        })
+        .attr("height", function (d) {
+          return d.data.metric.NOM;
+        })
     //.attr("width", bbox.getBBox().width)""
     //.attr("height", bbox.getBBox().height)
     .attr("stroke", "black")
