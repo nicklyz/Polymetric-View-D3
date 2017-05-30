@@ -800,13 +800,23 @@ var example = [
       "NOM": "34",
       "WLOC": "333",
     }
+  },
+  {"id": "6", "parent": "", "name": "NULL",
+    "metric": {
+      "NOA": "12",
+      "NOM": "34",
+      "WLOC": "333",
+    }
   }
 ];
 
+var source = PMV.fillRoots(example)
+
+// this cannot have multiple roots
 var root = d3.stratify()
     .id(function(d) { return d.id; })
     .parentId(function(d) { return d.parent; })
-    (example);
+    (source);
 
 var i = 0,
     duration = 750,
@@ -816,7 +826,11 @@ var i = 0,
 var tree = d3.layout.tree().nodeSize([70, 40]);
 var diagonal = d3.svg.diagonal()
     .projection(function (d) {
-    return [d.x + rectW / 2, d.y + rectH / 2];
+      if (d.data) {
+        console.log(d);
+        return [d.x, d.y]
+      }
+      return [d.x, d.y];
 });
 
 var svg = d3.select("#body").append("svg").attr("width", 1000).attr("height", 1000)
@@ -880,14 +894,15 @@ function update(source) {
         return d._children ? "lightsteelblue" : "#fff";
     });
 
-    nodeEnter.append("text")
-        .attr("x", rectW / 2)
-        .attr("y", rectH / 2)
-        .attr("dy", ".35em")
-        .attr("text-anchor", "middle")
-        .text(function (d) {
-        return d.data.name;
-    });
+    //
+    // nodeEnter.append("text")
+    //     .attr("x", rectW / 2)
+    //     .attr("y", rectH / 2)
+    //     .attr("dy", ".35em")
+    //     .attr("text-anchor", "middle")
+    //     .text(function (d) {
+    //     return d.data.name;
+    // });
 
     // Transition nodes to their new position.
     var nodeUpdate = node.transition()
@@ -909,8 +924,8 @@ function update(source) {
         return d._children ? "lightsteelblue" : "#fff";
     });
 
-    nodeUpdate.select("text")
-        .style("fill-opacity", 1);
+    // nodeUpdate.select("text")
+    //     .style("fill-opacity", 1);
 
     // Transition exiting nodes to the parent's new position.
     var nodeExit = node.exit().transition()
@@ -932,7 +947,7 @@ function update(source) {
     .attr("stroke", "black")
         .attr("stroke-width", 1);
 
-    nodeExit.select("text");
+    // nodeExit.select("text");
 
     // Update the links…
     var link = svg.selectAll("path.link")
@@ -980,6 +995,12 @@ function update(source) {
     nodes.forEach(function (d) {
         d.x0 = d.x;
         d.y0 = d.y;
+    });
+
+    link.each(function(d){
+        if (d.source.data.name == "root") {
+          d3.select(this).remove();
+        }
     });
 }
 
