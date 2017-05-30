@@ -3,17 +3,18 @@
 
 MSE = {}
 
+
 require("jsdom/lib/old-api.js").env("", function(err, window) {
 if (err) {
     console.error(err);
     return;
 }
+
 var $ = require('jquery')(window);
 
 MSE.createNode = function(type, attrs) { // <- this is defined in msegrammar.js and gets called for each node when parsed
 	var metrics = [
-		/* class  */ "CBO", "NOA", "NOM", "NOPUBM",
-		/* method */ "LOC", "CYCLO" 							
+		/* class  */ "NOA", "NOM", "NMO", "HNL", "NME", "NMI", "NOC", "WLOC", "WNOC"						
 	];
 	var node = { type: type };
 
