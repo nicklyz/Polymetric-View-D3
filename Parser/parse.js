@@ -24,12 +24,12 @@ processMSE(function(err, result) {
             case "Class":
                 if (item.id in dict) {    
                     dict[item.id]["name"] = item.name;
-                    dict[item.id]["metrics"] = {"NOA": 0, "NOM": item.NOM, "WLOC": item.LOC};
+                    dict[item.id]["metrics"] = {"NOA": 0, "NOM": item.NOM, "WLOC": item.WLOC};
                 }
                 else {
                     dict[item.id] = {
                         "name": item.name,
-                        "metrics": {"NOA": 0, "NOM": item.NOM, "WLOC": item.LOC},
+                        "metrics": {"NOA": 0, "NOM": item.NOM, "WLOC": item.WLOC},
                         "subclass": [],
                         "parent": 0
                     };
