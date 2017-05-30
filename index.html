@@ -2,6 +2,10 @@
 <html>
 <head>
 	<script src="js/jquery-3.2.1.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="js/tree.css">
+	<script type="text/javascript" src="js/d3.v3.min.js"></script>
+	<script type="text/javascript" src="js/d3-hierarchy.v1.min.js"></script>
+	<script type="text/javascript" src="js/app.js"></script>
 	<script type="text/javascript" src="js/script.js"></script>
 </head>
 <body>
@@ -9,17 +13,19 @@
 	<h1>Polymetric Views</h1>
 
 	<div>
-		Select a MSE file: 
+		Select a MSE file:
 		<form>
 			<input type="file" id="fileInput" onchange="parseFile()"><br><br>
 		</form>
-		
+
 	</div>
-	<pre id="fileDisplayArea"><pre>
+	<pre id="fileDisplayArea"></pre>
 
 	<script type="text/javascript">
 		makeForm();
 	</script>
 
+	<div id="body"></div>
+	<script type="text/javascript" src="js/tree.js"></script>
 </body>
 </html>
