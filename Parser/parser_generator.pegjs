@@ -1,8 +1,8 @@
-start     = _ open _ nodes:node* _ close _                { return nodes; }
+start     = _ open "Moose.Model (sourceLanguage 'Java') (entity" _ nodes:node* _ close _ close _                { return nodes; }
 node      = open _ type:famixtype _ attrs:attr* _ close _ { return MSE.createNode(type, attrs);  }
 famixtype = "FAMIX." typename:chars                       { return typename; }
 ref       = open _ "idref:" _ id:int _ close _              { return { ref: id }; }
-attr      = open _ name:name _ values:value* _ close _    { return { name: name, values:values }; }
+attr      = open _ name:name _ values:(value _)* _ close _    { return { name: name, values:values }; }
 value     = chars / string / ref
 open      = '('
 close     = ')'

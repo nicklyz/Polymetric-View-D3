@@ -4,7 +4,7 @@ var fs = require('fs');
 
 function processMSE(callback) {
     // any async callback invokes callback with response
-    fs.readFile('mushi_project.mse','utf8',function(err,contents) {
+    fs.readFile('phoenix.mse','utf8',function(err,contents) {
         var result = parser.parse(contents)
 
         fs.writeFile("output.txt",JSON.stringify(result,null,4),function(err) {

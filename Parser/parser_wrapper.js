@@ -14,7 +14,8 @@ var $ = require('jquery')(window);
 
 MSE.createNode = function(type, attrs) { // <- this is defined in msegrammar.js and gets called for each node when parsed
 	var metrics = [
-		/* class  */ "NOA", "NOM", "NMO", "HNL", "NME", "NMI", "NOC", "WLOC", "WNOC"						
+		/* class  */ "NOPA", "NOM","WLOC", "WMC", "NOAM","BUR", "AMW", "NAS","BOvR",
+		/* method */ "CM", "CC", "LOC" ,"MAXNESTING"						
 	];
 	var node = { type: type };
 
