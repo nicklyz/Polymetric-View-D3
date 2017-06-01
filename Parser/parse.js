@@ -18,49 +18,64 @@ function processMSE(callback) {
 
 processMSE(function(err, result) {
     // process the async result
-    var dict = {}
+    var dict = {};
+    var namespaces = {};
     result.forEach(function(item) {
         switch(item.type) {
+            case "Namespace":
+                namespaces[item.id] = item.name;
+                break;
+
             case "Class":
                 if (item.id in dict) {    
                     dict[item.id]["name"] = item.name;
                     dict[item.id]["metrics"] = {"NOA": 0, "NOM": item.NOM, "WLOC": item.WLOC};
+                    dict[item.id]["namespace"] = namespaces[item.belongsTo.ref];
                 }
                 else {
                     dict[item.id] = {
                         "name": item.name,
                         "metrics": {"NOA": 0, "NOM": item.NOM, "WLOC": item.WLOC},
                         "subclass": [],
-                        "parent": 0
+                        "parent": [],
+                        "namespace": namespaces[item.belongsTo.ref]
                     };
                 }
                 break;
 
             case "InheritanceDefinition":
-                subclass = item.subclass.ref
-                parent = item.superclass.ref
+                subclass = item.subclass.ref;
+                parent = item.superclass.ref;
                 if (subclass in dict) {
-                    dict[subclass]["parent"] = parent;
+                    dict[subclass]["parent"].push(parent);
                 }
                 else {
                     dict[subclass] = {
-                        "parent": parent
+                        "subclass": [],
+                        "parent": [parent]
                     };
                 }                              
                 if (parent in dict) {
-                    dict[parent]["subclass"].concat(subclass)
+                    dict[parent]["subclass"].push(subclass);
                 }
                 else {
                     dict[parent] = {
-                        "subclass":[parent]
-                    }
+                        "subclass":[subclass],
+                        "parent":[]
+                    };
                 }
                 break;
 
 
         }
     });
-     console.log(dict)
+    console.log(namespaces)
+    // console.log(dict);
+    fs.writeFile("dict.txt",JSON.stringify(dict,null,4),function(err) {
+            if (err) 
+                return console.log(err);
+            console.log("The dict file was saved!");
+    });
 });
 
 
