@@ -15,7 +15,17 @@ function processMSE(callback) {
         });
     });
 }
-
+function jsonToArray(data) {
+    array = []
+    for (var key in data) {
+        if (data.hasOwnProperty(key)) {
+            temp = data[key];
+            temp["id"] = key
+            array.push(temp)
+        }
+    }
+    console.log(array)
+}
 processMSE(function(err, result) {
     // process the async result
     var dict = {};
@@ -76,6 +86,7 @@ processMSE(function(err, result) {
                 return console.log(err);
             console.log("The dict file was saved!");
     });
+    jsonToArray(dict);
 });
 
 
