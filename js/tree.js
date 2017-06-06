@@ -77,7 +77,7 @@ var diagonal = d3.svg.diagonal()
 // delete the previous chart
 d3.selectAll("svg").remove();
 
-var svg = d3.select("#body").append("svg").attr("width", 1000).attr("height", 1000)
+var svg = d3.select("body").append("svg").attr("width", 1000).attr("height", 1000)
     .call(zm = d3.behavior.zoom().scaleExtent([1,3]).on("zoom", redraw)).append("g")
     .attr("transform", "translate(" + 350 + "," + 20 + ")");
 

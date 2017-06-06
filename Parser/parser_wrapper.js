@@ -4,6 +4,7 @@
 MSE = {}
 
 
+/*
 require("jsdom/lib/old-api.js").env("", function(err, window) {
 if (err) {
     console.error(err);
@@ -11,6 +12,7 @@ if (err) {
 }
 
 var $ = require('jquery')(window);
+*/
 
 MSE.createNode = function(type, attrs) { // <- this is defined in msegrammar.js and gets called for each node when parsed
 	var metrics = [
@@ -34,10 +36,11 @@ MSE.createNode = function(type, attrs) { // <- this is defined in msegrammar.js 
 };
 
 MSE.parse = function(content){
-	var parser = require("./parser.js")
-	var result = parser.parse(content)
+	//var parser = require("./parser.js")
+	//var result = parser.parse(content)
+	var result = peg$parse(content)
 	return result
 }
-});
+//});
 
-module.exports = MSE
+//module.exports = MSE

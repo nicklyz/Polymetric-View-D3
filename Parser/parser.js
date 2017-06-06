@@ -946,7 +946,9 @@ function peg$parse(input, options) {
   }
 }
 
+/*
 module.exports = {
   SyntaxError: peg$SyntaxError,
   parse:       peg$parse
 };
+*/
