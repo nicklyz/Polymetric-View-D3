@@ -3,11 +3,11 @@ CS 230 Project: Polymetric Views in D3
 Spring 2017 UCLA
 Prof. Kim
 
-Yanzhe (Nick) Liu
-Mushi Zhou
-Quanjie Geng
-Xiao Yan
-Daniel Lau
+Yanzhe (Nick) Liu. 
+Mushi Zhou       
+Quanjie Geng   
+Xiao Yan  
+Daniel Lau   
 
 
 Description:
@@ -35,8 +35,8 @@ Steps To Use:
 
 References:
 
-Example Repo of similar work: https://github.com/softvis/polymetric-views
-Tutorial for generating mse: http://www.themoosebook.org/book/#h1thefamixfamilyofmeta-models
-Tool for generating MSE (iPlasma): http://loose.upt.ro/iplasma/
-Our project repo: https://github.com/nicklyz/Polymetric-View-D3
+Example Repo of similar work: https://github.com/softvis/polymetric-views      
+Tutorial for generating mse: http://www.themoosebook.org/book/#h1thefamixfamilyofmeta-models 
+Tool for generating MSE (iPlasma): http://loose.upt.ro/iplasma/       
+Our project repo: https://github.com/nicklyz/Polymetric-View-D3       
 
