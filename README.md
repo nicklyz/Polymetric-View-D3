@@ -18,6 +18,7 @@ http://dl.acm.org/citation.cfm?id=942788
 Our goal is to be able to display a selection of Polymatric views given a MSE file for a Java project.
 
 Current views avaliable are:
+
 .......
 
 Steps To Use:
@@ -28,6 +29,7 @@ Steps To Use:
 4. Any generated MSE file by directly processed by our project by using the upload function on our front page. So our project scale with any code base sizes. 
 5. After uploading MSE file, our program automatically parse the file and extracts all the attributes we use. 
 6. A selection 
+
 .......
 
 
