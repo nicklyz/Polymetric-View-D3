@@ -80,7 +80,7 @@ function scatter_plot(example){
         .attr("class", "axis")
         .attr("transform", "translate(0, "+(left_pad-pad)+")")
         .call(xAxis);
-     
+
     svg.append("g")
         .attr("class", "axis")
         .attr("transform", "translate("+(left_pad-pad)+", 0)")
@@ -96,18 +96,18 @@ function scatter_plot(example){
     var max_h = d3.max(example.map(
                            function (d) { return d.metric.NOA; })),
             hscale = d3.scale.linear()
-                .domain([0, d3.max(example, function (d) { return d.metric.NOA; })])
+                .domain([0, d3.max(example, function (d) { return PMV.getMetric(d, "NOA"); })])
                 .range([0, 50]);
 
     var max_w = d3.max(example.map(
-                           function (d) { return d.metric.NOPA; })),
+                           function (d) { return PMV.getMetric(d, "NOPA"); })),
             wscale = d3.scale.linear()
-                .domain([0, d3.max(example, function (d) { return d.metric.NOPA; })])
+                .domain([0, d3.max(example, function (d) { return PMV.getMetric(d, "NOPA"); })])
                 .range([0, 50]);
 
 
     var fscale = d3.scale.linear()
-            .domain([0, d3.max(example, function (d) { return d.metric.CC; })])
+            .domain([0, d3.max(example, function (d) { return PMV.getMetric(d, "CC"); })])
             .range([100,0]);
 
 
@@ -117,37 +117,16 @@ function scatter_plot(example){
         .data(example)
         .enter()
         .append("rect")
-        .attr("x", function (d) { return x(d.metric.NOM); })
-        .attr("y", function (d) { return y(d.metric.WLOC); })
+        .attr("x", function (d) { return x(PMV.getMetric(d, "NOM")); })
+        .attr("y", function (d) { return y(PMV.getMetric(d, "WLOC")); })
         .transition()
         .duration(800)
-        .attr("width", function (d) { return wscale(d.metric.NOPA); })
-        .attr("height", function (d) { return hscale(d.metric.NOA); })
+        .attr("width", function (d) { return wscale(PMV.getMetric(d, "NOPA")); })
+        .attr("height", function (d) { return hscale(PMV.getMetric(d, "NOA")); })
         //.attr("shape-rendering", "crispEdges")
-        .style("fill", function(d) { return "hsl(200, 80%, " + fscale(d.metric.CC) + "%)" })
+        .style("fill", function(d) { return "hsl(200, 80%, " + fscale(PMV.getMetric(d, "CC")) + "%)" })
 
 
 }
 
 scatter_plot(example)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
