@@ -23,7 +23,6 @@ class PMV {
     //   ...
     // }
     var data;
-    console.log(d);
     if(d.hasOwnProperty('data')) {
       data = d.data.metric;
     } else {
