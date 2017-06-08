@@ -21,6 +21,13 @@ Current views avaliable are:
 
 .......
 
+All attributes selected:
+Class:
+NOPA, NOM, WLOC, WMC, NOAM, BUR, AMW, NAS, BOvR.  
+Method:
+CM, CC, LOC, MAXNESTING
+
+
 Steps To Use:
 
 1. There are two current verisons of MSE formats, 3.0 and 2.1. Version 3.0 used by MOOSE (a tool to visualize code repositories) does not include the set of attributes that are disscussed in our reference paper. So our tool only works with MSE version 2.1 that is used by Code City (a 3D visualization tool for code repositories).
