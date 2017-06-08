@@ -48,17 +48,19 @@ MSE.parse = function(content){
             	console.log(item.name[0])
                 namespaces[item.id[0]] = item.name[0];
                 break;
-
+NOPA, NOM, WLOC, WMC, NOAM, BUR, AMW, NAS, BOvR
             case "Class":
                 if (item.id[0] in dict) {    
                     dict[item.id[0]]["name"] = item.name[0];
-                    dict[item.id[0]]["metrics"] = {"NOA": 0, "NOM": item.NOM, "WLOC": item.WLOC};
+                    dict[item.id[0]]["metrics"] = {"NOPA": item.NOPA, "NOM": item.NOM, "WLOC": item.WLOC,
+                		"WMC":item.WMC,"NOAM":item.NOAM,"BUR":item.BUR,"AMW":item.AMW,"NAS":item.NAS,"BOvR":item.BOvR};
                     dict[item.id[0]]["namespace"] = namespaces[item.belongsTo[0].ref];
                 }
                 else {
                     dict[item.id[0]] = {
                         "name": item.name[0],
-                        "metrics": {"NOA": 0, "NOM": item.NOM, "WLOC": item.WLOC},
+                        "metrics": {"NOPA": item.NOPA, "NOM": item.NOM, "WLOC": item.WLOC,
+                			"WMC":item.WMC,"NOAM":item.NOAM,"BUR":item.BUR,"AMW":item.AMW,"NAS":item.NAS,"BOvR":item.BOvR},
                         // "subclass": [],
                         "parent": "",
                         "namespace": namespaces[item.belongsTo[0].ref]
