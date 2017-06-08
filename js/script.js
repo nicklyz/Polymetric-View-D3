@@ -19,9 +19,13 @@ function parseFile() {
 
 		reader.onload = function(e) {
 			//fileDisplayArea.innerText = reader.result;	// replace the following with interesting logic
+			
+			var result = MSE.parse(reader.result)
+			// var printData = JSON.stringify(result.slice(0,1000), null, 2)
 
-			var result = MSE.parse(reader.result);
-			var printData = JSON.stringify(result.slice(0,10), null, 2);
+			var printData = JSON.stringify(result,null,4)
+			// fileDisplayArea.innerText = printData
+
 			redraw();
 
 			fileDisplayArea.innerText = printData;
