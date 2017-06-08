@@ -12,8 +12,8 @@ function scatter(data, metrics){
             .attr("width", w)
             .attr("height", h);
 
-    var x = d3.scale.linear().domain([0, 23]).range([left_pad, w-pad]),
-        y = d3.scale.linear().domain([0, 23]).range([left_pad, h-pad]);
+    var x = d3.scale.linear().domain([0, d3.max(data, function (d) { return PMV.getMetric(d, "NOM"); })]).range([left_pad, w-pad]),
+        y = d3.scale.linear().domain([0, d3.max(data, function (d) { return PMV.getMetric(d, "WLOC"); })]).range([left_pad, h-pad]);
 
 
     var xAxis = d3.svg.axis().scale(x).orient("top"),
