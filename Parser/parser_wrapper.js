@@ -72,12 +72,12 @@ MSE.parse = function(content){
                 subclass = item.subclass[0].ref;
                 parent = item.superclass[0].ref;
                 if (subclass in dict) {
-                    dict[subclass]["parent"]=Math.max(dict[subclass]["parent"],parent);
+                    dict[subclass]["parent"]=Math.max(dict[subclass]["parent"],parent).toString();
                 }
                 else {
                     dict[subclass] = {
                         // "subclass": [],
-                        "parent": parent
+                        "parent": parent.toString()
                     };
                 }
                 // if (parent in dict) {
