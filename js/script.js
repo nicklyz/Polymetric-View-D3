@@ -133,6 +133,15 @@ function redraw() {
 
 	var layout = $('#layout').find(':selected').attr('value');
 
+	var metric = {};
+
+	metric.x = $('#position-x').find(':selected').attr('value'),
+	metric.y = $('#position-y').find(':selected').attr('value'),
+	metric.width = $('#width').find(':selected').attr('value'),
+	metric.height = $('#height').find(':selected').attr('value'),
+	metric.color = $('#color').find(':selected').attr('value'),
+	metric.sort = $('#sort').find(':selected').attr('value');
+	
 	switch(layout) {
 		case 'scatter':
 			scatter(example);
