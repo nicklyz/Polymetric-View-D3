@@ -1,4 +1,4 @@
-function scatter(data){
+function scatter(data, metrics){
 
     var w = 500,
         h = 500,
@@ -38,20 +38,20 @@ function scatter(data){
         .attr("y", function () { return h/2-5; });
 
     var max_h = d3.max(data.map(
-                           function (d) { return d.metric.NOA; })),
+                           function (d) { return PMV.getMetric(d, metrics.height); })),
             hscale = d3.scale.linear()
-                .domain([0, d3.max(data, function (d) { return PMV.getMetric(d, "NOA"); })])
+                .domain([0, d3.max(data, function (d) { return PMV.getMetric(d, metrics.height); })])
                 .range([0, 50]);
 
     var max_w = d3.max(data.map(
-                           function (d) { return PMV.getMetric(d, "NOPA"); })),
+                           function (d) { return PMV.getMetric(d, metrics.width); })),
             wscale = d3.scale.linear()
-                .domain([0, d3.max(data, function (d) { return PMV.getMetric(d, "NOPA"); })])
+                .domain([0, d3.max(data, function (d) { return PMV.getMetric(d, metrics.width); })])
                 .range([0, 50]);
 
 
     var fscale = d3.scale.linear()
-            .domain([0, d3.max(data, function (d) { return PMV.getMetric(d, "CC"); })])
+            .domain([0, d3.max(data, function (d) { return PMV.getMetric(d, metrics.color); })])
             .range([100,0]);
 
 
@@ -61,12 +61,12 @@ function scatter(data){
         .data(data)
         .enter()
         .append("rect")
-        .attr("x", function (d) { return x(PMV.getMetric(d, "NOM")); })
-        .attr("y", function (d) { return y(PMV.getMetric(d, "WLOC")); })
+        .attr("x", function (d) { return x(PMV.getMetric(d, metrics.x)); })
+        .attr("y", function (d) { return y(PMV.getMetric(d, metrics.y)); })
         .transition()
         .duration(800)
-        .attr("width", function (d) { return wscale(PMV.getMetric(d, "NOPA")); })
-        .attr("height", function (d) { return hscale(PMV.getMetric(d, "NOA")); })
+        .attr("width", function (d) { return wscale(PMV.getMetric(d, metrics.width)); })
+        .attr("height", function (d) { return hscale(PMV.getMetric(d, metrics.width)); })
         //.attr("shape-rendering", "crispEdges")
-        .style("fill", function(d) { return "hsl(200, 80%, " + fscale(PMV.getMetric(d, "CC")) + "%)" });
+        .style("fill", function(d) { return "hsl(200, 80%, " + fscale(PMV.getMetric(d, metrics.color)) + "%)" });
 }
