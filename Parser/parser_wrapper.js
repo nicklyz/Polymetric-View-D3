@@ -48,7 +48,7 @@ MSE.parse = function(content){
             	console.log(item.name[0])
                 namespaces[item.id[0]] = item.name[0];
                 break;
-NOPA, NOM, WLOC, WMC, NOAM, BUR, AMW, NAS, BOvR
+
             case "Class":
                 if (item.id[0] in dict) {    
                     dict[item.id[0]]["name"] = item.name[0];
