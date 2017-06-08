@@ -1,62 +1,4 @@
-var example = [
-  {"id": "1", "parent": "", "name": "Object",
-    "metric": {
-      "NOA": 1,
-      "NOM": 1,
-      "WLOC": 3,
-      "NOPA": 11,
-      "CC": 1,
-    }
-  },
-  {"id": "2", "parent": "1", "name": "String",
-    "metric": {
-      "NOA": 2,
-      "NOM": 3,
-      "WLOC": 5,
-      "NOPA": 9,
-      "CC": 5,
-    }
-  },
-  {"id": "3", "parent": "1", "name": "List",
-    "metric": {
-      "NOA": 5,
-      "NOM": 7,
-      "WLOC": 8,
-      "NOPA": 3,
-      "CC": 10,
-
-    }
-  },
-  {"id": "4", "parent": "3", "name": "LinkedList",
-    "metric": {
-      "NOA": 7,
-      "NOM": 9,
-      "WLOC": 10,
-      "NOPA": 4,
-      "CC": 15,
-    }
-  },
-  {"id": "5", "parent": "3", "name": "ArrayList",
-    "metric": {
-      "NOA": 9,
-      "NOM": 13,
-      "WLOC": 12,
-      "NOPA": 4,
-      "CC": 20,
-    }
-  },
-  {"id": "6", "parent": "", "name": "NULL",
-    "metric": {
-      "NOA": 12,
-      "NOM": 17,
-      "WLOC": 19,
-      "NOPA": 4,
-      "CC": 25,
-    }
-  }
-];
-
-function tree(data) {
+function tree(data, metrics) {
   var source = PMV.fillRoots(data);
 
   height = 800;
@@ -74,10 +16,6 @@ function tree(data) {
   var tree = d3.layout.tree().nodeSize([70, 40]);
   var diagonal = d3.svg.diagonal()
       .projection(function (d) {
-        if (d.data) {
-          console.log(d);
-          return [d.x, d.y]
-        }
         return [d.x, d.y];
   });
   // delete the previous chart
@@ -130,10 +68,12 @@ function tree(data) {
 
       nodeEnter.append("rect")
           .attr("width", function (d) {
-            return d.data.metric.NOA;
+              console.log(d);
+              console.log(metrics.width);
+            return PMV.getMetric(d, metrics.width);
           })
           .attr("height", function (d) {
-            return d.data.metric.NOM;
+            return PMV.getMetric(d, metrics.height);
           })
           .attr("stroke", "black")
           .attr("stroke-width", 1)
@@ -160,10 +100,10 @@ function tree(data) {
 
       nodeUpdate.select("rect")
           .attr("width", function (d) {
-            return d.data.metric.NOA;
+            return PMV.getMetric(d, metrics.width);
           })
           .attr("height", function (d) {
-            return d.data.metric.NOM;
+            return PMV.getMetric(d, metrics.height);
           })
           .attr("stroke", "black")
           .attr("stroke-width", 1)
@@ -184,10 +124,10 @@ function tree(data) {
 
       nodeExit.select("rect")
           .attr("width", function (d) {
-            return d.data.metric.NOA;
+            return PMV.getMetric(d, metrics.width);
           })
           .attr("height", function (d) {
-            return d.data.metric.NOM;
+            return PMV.getMetric(d, metrics.height);
           })
       //.attr("width", bbox.getBBox().width)""
       //.attr("height", bbox.getBBox().height)
@@ -273,5 +213,3 @@ function tree(data) {
         + " scale(" + d3.event.scale + ")");
   }
 }
-
-tree(example);
