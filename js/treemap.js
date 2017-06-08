@@ -1,4 +1,4 @@
-function treemap(data) {
+function treemap(data, metrics) {
   var source = PMV.fillRoots(data)
 
   // this cannot have multiple roots
@@ -17,7 +17,7 @@ function treemap(data) {
     .attr("height", 1000);
 
   var fscale = d3.scale.linear()
-      .domain([0, d3.max(data, function (d) { return PMV.getMetric(d, "CC"); })])
+      .domain([0, d3.max(data, function (d) { return PMV.getMetric(d, metrics.color); })])
       .range([100,0]);
 
   var layout = d3.layout.treemap()
@@ -25,8 +25,8 @@ function treemap(data) {
   	.padding(3)
   	.mode("squarify")
   	.round(true)
-  	.sort(function(da, db) { return PMV.getMetric(da, "NOA") - PMV.getMetric(db, "NOA") })
-  	.value(function(d) { return PMV.getMetric(d, "NOA"); })
+  	.sort(function(da, db) { return PMV.getMetric(da, metrics.sort) - PMV.getMetric(db, metrics.sort) })
+  	.value(function(d) { return PMV.getMetric(d, metrics.sort); })
   	.children(function(d) { return d.children; });
 
   var nodes = layout.nodes(root);
@@ -40,7 +40,7 @@ function treemap(data) {
   	.attr("width", function(d) { return d.dx })
   	.attr("height", function(d) { return d.dy })
   	.attr("shape-rendering", "crispEdges")
-    .style("fill", function(d) { return "hsl(200, 80%, " + fscale(PMV.getMetric(d, "CC")) + "%)" })
+    .style("fill", function(d) { return "hsl(200, 80%, " + fscale(PMV.getMetric(d, metrics.color)) + "%)" })
     .call(tooltip());
 
 }

@@ -24,16 +24,11 @@ class PMV {
     // }
     var data;
     if(d.hasOwnProperty('data')) {
-      data = d.data.metric;
+      data = d.data.metrics;
     } else {
-      data = d.metric;
+      data = d.metrics;
     }
-    var mi = metric.split("/")
-  	if(mi.length == 1) {
-  		return data[metric] == undefined ? 0 : data[metric]
-  	} else {
-  		return (data[mi[1]] != 0) ? (data[mi[0]] / data[mi[1]]) : 0
-  	}
+  	return data == undefined || data[metric] == undefined ? 0 : data[metric];
   }
 }
 

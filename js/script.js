@@ -19,16 +19,16 @@ function parseFile() {
 
 		reader.onload = function(e) {
 			//fileDisplayArea.innerText = reader.result;	// replace the following with interesting logic
-			
+
 			var result = MSE.parse(reader.result)
 			// var printData = JSON.stringify(result.slice(0,1000), null, 2)
 
 			var printData = JSON.stringify(result,null,4)
 			// fileDisplayArea.innerText = printData
 
-			redraw();
+			redraw(result);
 
-			fileDisplayArea.innerText = printData;
+			// fileDisplayArea.innerText = printData;
 		}
 
 		reader.readAsText(file);
@@ -75,12 +75,12 @@ function adjustDimsAndRedraw() {
 	redraw();
 }
 
-function redraw() {
+function redraw(data) {
 	// add plotting mechanisms here
 	var example = [
 	  {"id": "1", "parent": "", "name": "Object",
-	    "metric": {
-	      "NOA": 1,
+	    "metrics": {
+	      "NOPA": 1,
 	      "NOM": 1,
 	      "WLOC": 3,
 	      "NOPA": 11,
@@ -88,8 +88,8 @@ function redraw() {
 	    }
 	  },
 	  {"id": "2", "parent": "1", "name": "String",
-	    "metric": {
-	      "NOA": 2,
+	    "metrics": {
+	      "NOPA": 2,
 	      "NOM": 3,
 	      "WLOC": 5,
 	      "NOPA": 9,
@@ -97,8 +97,8 @@ function redraw() {
 	    }
 	  },
 	  {"id": "3", "parent": "1", "name": "List",
-	    "metric": {
-	      "NOA": 5,
+	    "metrics": {
+	      "NOPA": 5,
 	      "NOM": 7,
 	      "WLOC": 8,
 	      "NOPA": 3,
@@ -107,8 +107,8 @@ function redraw() {
 	    }
 	  },
 	  {"id": "4", "parent": "3", "name": "LinkedList",
-	    "metric": {
-	      "NOA": 7,
+	    "metrics": {
+	      "NOPA": 7,
 	      "NOM": 9,
 	      "WLOC": 10,
 	      "NOPA": 4,
@@ -116,8 +116,8 @@ function redraw() {
 	    }
 	  },
 	  {"id": "5", "parent": "3", "name": "ArrayList",
-	    "metric": {
-	      "NOA": 9,
+	    "metrics": {
+	      "NOPA": 9,
 	      "NOM": 13,
 	      "WLOC": 12,
 	      "NOPA": 4,
@@ -125,8 +125,8 @@ function redraw() {
 	    }
 	  },
 	  {"id": "6", "parent": "", "name": "NULL",
-	    "metric": {
-	      "NOA": 12,
+	    "metrics": {
+	      "NOPA": 12,
 	      "NOM": 17,
 	      "WLOC": 19,
 	      "NOPA": 4,
@@ -137,24 +137,24 @@ function redraw() {
 
 	var layout = $('#layout').find(':selected').attr('value');
 
-	var metric = {};
+	var metrics = {};
 
-	metric.x = $('#position-x').find(':selected').attr('value'),
-	metric.y = $('#position-y').find(':selected').attr('value'),
-	metric.width = $('#width').find(':selected').attr('value'),
-	metric.height = $('#height').find(':selected').attr('value'),
-	metric.color = $('#color').find(':selected').attr('value'),
-	metric.sort = $('#sort').find(':selected').attr('value');
-	
+	metrics.x = $('#position-x').find(':selected').attr('value'),
+	metrics.y = $('#position-y').find(':selected').attr('value'),
+	metrics.width = $('#width').find(':selected').attr('value'),
+	metrics.height = $('#height').find(':selected').attr('value'),
+	metrics.color = $('#color').find(':selected').attr('value'),
+	metrics.sort = $('#sort').find(':selected').attr('value');
+
 	switch(layout) {
 		case 'scatter':
-			scatter(example);
+			scatter(example, metrics);
 			break;
 		case 'tree':
-			tree(example);
+			tree(example, metrics);
 			break;
 		case 'treemap':
-			treemap(example);
+			treemap(example, metrics);
 			break;
 		default:
 	}
