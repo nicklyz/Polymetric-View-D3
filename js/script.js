@@ -1,5 +1,5 @@
 var spec = {};
-spec.dimensions = ['position(x)', 'position(y)', 'width', 'height', 'color', 'sort'];
+spec.dimensions = ['position-x', 'position-y', 'width', 'height', 'color', 'sort'];
 spec.metrics = ['NOPA', 'NOM', 'WLOC', 'WMC', 'NOAM', 'BUR', 'AMW', 'NAS', 'BOvR'];
 spec.layouts = [		// add more plot types here
 	{name: 'scatter', title: 'Scatter Plot', dimensions: ['position(x)', 'position(y)', 'width', 'height', 'color']},
