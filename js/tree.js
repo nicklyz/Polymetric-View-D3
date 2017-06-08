@@ -1,4 +1,4 @@
-function tree(data) {
+function tree(data, metrics) {
   var source = PMV.fillRoots(data);
 
   height = 800;
@@ -68,10 +68,12 @@ function tree(data) {
 
       nodeEnter.append("rect")
           .attr("width", function (d) {
-            return d.data.metric.NOA;
+              console.log(d);
+              console.log(metrics.width);
+            return PMV.getMetric(d, metrics.width);
           })
           .attr("height", function (d) {
-            return d.data.metric.NOM;
+            return PMV.getMetric(d, metrics.height);
           })
           .attr("stroke", "black")
           .attr("stroke-width", 1)
@@ -98,10 +100,10 @@ function tree(data) {
 
       nodeUpdate.select("rect")
           .attr("width", function (d) {
-            return d.data.metric.NOA;
+            return PMV.getMetric(d, metrics.width);
           })
           .attr("height", function (d) {
-            return d.data.metric.NOM;
+            return PMV.getMetric(d, metrics.height);
           })
           .attr("stroke", "black")
           .attr("stroke-width", 1)
@@ -122,10 +124,10 @@ function tree(data) {
 
       nodeExit.select("rect")
           .attr("width", function (d) {
-            return d.data.metric.NOA;
+            return PMV.getMetric(d, metrics.width);
           })
           .attr("height", function (d) {
-            return d.data.metric.NOM;
+            return PMV.getMetric(d, metrics.height);
           })
       //.attr("width", bbox.getBBox().width)""
       //.attr("height", bbox.getBBox().height)

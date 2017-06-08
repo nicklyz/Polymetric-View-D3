@@ -1,11 +1,16 @@
 var spec = {};
 spec.dimensions = ['position-x', 'position-y', 'width', 'height', 'color', 'sort'];
-spec.metrics = ['NOPA', 'NOM', 'WLOC', 'WMC', 'NOAM', 'BUR', 'AMW', 'NAS', 'BOvR'];
+spec.metrics = ['N/A', 'NOPA', 'NOM', 'WLOC', 'WMC', 'NOAM', 'BUR', 'AMW', 'NAS', 'BOvR'];
 spec.layouts = [		// add more plot types here
 	{name: 'scatter', title: 'Scatter Plot', dimensions: ['position-x', 'position-y', 'width', 'height', 'color']},
 	{name: 'tree', title: 'Tree Plot', dimensions: ['width', 'height', 'color']},
 	{name: 'treemap', title: 'Tree Map', dimensions: ['width', 'height', 'color', 'sort']},
 	{name: 'checker', title: 'Checker Plot', dimensions: ['width', 'height', 'color', 'sort']},
+];
+spec.views = [
+	{name: 'custom', title: 'Custom View'},
+	{name: 'hotspots', title: 'System Hotspots View', layout: 'checker', defaults: ['NOPA', 'NOM', 'WLOC', 'NOPA']},
+	{name: 'complexity', title: 'System Complexity View', layout: 'tree', defaults: ['NOPA', 'NOM', 'WLOC']}
 ];
 
 function parseFile() {
@@ -19,16 +24,16 @@ function parseFile() {
 
 		reader.onload = function(e) {
 			//fileDisplayArea.innerText = reader.result;	// replace the following with interesting logic
-			
+
 			var result = MSE.parse(reader.result)
 			// var printData = JSON.stringify(result.slice(0,1000), null, 2)
 
 			var printData = JSON.stringify(result,null,4)
 			// fileDisplayArea.innerText = printData
 
-			redraw();
+			redraw(result);
 
-			fileDisplayArea.innerText = printData;
+			// fileDisplayArea.innerText = printData;
 		}
 
 		reader.readAsText(file);
@@ -40,47 +45,85 @@ function parseFile() {
 function makeForm() {
 	var htmlForm = $('form');
 
-	htmlForm.append($('<span>').text('layout: '));
-	htmlForm.append($('<select>', { id: ('layout'), onchange: 'adjustDimsAndRedraw()'}));	// add some onclick logic here
-	$(spec.layouts).each(function(pi, p) {
-		$('#layout').append($('<option>', { value: p.name }).text(p.title));
-	});
+	htmlForm.append($('<span>').text('view: '));
+	htmlForm.append($('<select>', { id: ('view'), onchange: 'adjustDimsAndRedraw()'}));
 
-	$(spec.dimensions).each(function(di, d) {
-		htmlForm.append($('<span>').text(d + ": "));
-		htmlForm.append($('<select>', { id: d, onchange: 'redraw()'}));		// add some onclick logic here
-		$(spec.metrics).each(function(mi, m) {
-			$('#' + d).append($('<option>', { value: m }).text(m));
-		});
-	});
+	for (var i = 0; i < spec.views.length; i++) {
+		$('#view').append($('<option>', { value: spec.views[i].name }).text(spec.views[i].title));
+	}
+
+	htmlForm.append($('<span>').text('  layout: '));
+	htmlForm.append($('<select>', { id: ('layout'), onchange: 'adjustDimsAndRedraw()'}));
+
+	for (var i = 0; i < spec.layouts.length; i++) {
+		$('#layout').append($('<option>', { value: spec.layouts[i].name }).text(spec.layouts[i].title));
+	}
+
+	for (var i = 0; i < spec.dimensions.length; i++) {
+		htmlForm.append($('<span>').text("  " + spec.dimensions[i] + ": "));
+		htmlForm.append($('<select>', { id: spec.dimensions[i], onchange: 'redraw()'}));
+		for (var j = 0; j < spec.metrics.length; j++) {
+			$('#' + spec.dimensions[i]).append($('<option>', { value: spec.metrics[j] }).text(spec.metrics[j]));
+		}
+	}
 	adjustDimsAndRedraw();
 }
 
 function adjustDimsAndRedraw() {
-	var layout = $('#layout').find(':selected').attr('value');
-	var dimensions;
-	for (var i = spec.layouts.length - 1; i >= 0; i--) {
-		if (spec.layouts[i].name === layout) {
-			dimensions = spec.layouts[i].dimensions;
+	var view = $('#view').find(':selected').attr('value');
+
+	if (view === 'custom') {
+		$('#layout').removeAttr('disabled');
+		var layout = $('#layout').find(':selected').attr('value');
+		var dimensions;
+		for (var i = spec.layouts.length - 1; i >= 0; i--) {
+			if (spec.layouts[i].name === layout) {
+				dimensions = spec.layouts[i].dimensions;
+			}
+		}
+		for (var i = spec.dimensions.length - 1; i >= 0; i--) {
+			if (dimensions.includes(spec.dimensions[i])) {
+				$('#' + spec.dimensions[i]).removeAttr('disabled');
+			}
+			else {
+				$('#' + spec.dimensions[i]).attr('disabled', true);
+			}
 		}
 	}
-	for (var i = spec.dimensions.length - 1; i >= 0; i--) {
-		if (dimensions.includes(spec.dimensions[i])) {
-			$('#' + spec.dimensions[i]).removeAttr('disabled');
+	else {
+		var layout;
+		var dimensions;
+		var defaults;
+		for (var i = spec.views.length - 1; i >= 0; i--) {
+			if (spec.views[i].name === view) {
+				layout = spec.views[i].layout;
+				defaults = spec.views[i].defaults;
+			}
 		}
-		else {
+		for (var i = spec.layouts.length - 1; i >= 0; i--) {
+			if (spec.layouts[i].name === layout) {
+				dimensions = spec.layouts[i].dimensions;
+			}
+		}
+		$('#layout').attr('disabled', true);
+		$('#layout option[value="' + layout + '"]').prop("selected", true);
+		for (var i = spec.dimensions.length - 1; i >= 0; i--) {
 			$('#' + spec.dimensions[i]).attr('disabled', true);
+			$('#' + spec.dimensions[i] + ' option[value="N/A"]').prop("selected", true);
+		}
+		for (var i = dimensions.length - 1; i >= 0; i--) {
+			$('#' + dimensions[i] + ' option[value="' + defaults[i] + '"]').prop("selected", true);
 		}
 	}
 	redraw();
 }
 
-function redraw() {
+function redraw(data) {
 	// add plotting mechanisms here
 	var example = [
 	  {"id": "1", "parent": "", "name": "Object",
-	    "metric": {
-	      "NOA": 1,
+	    "metrics": {
+	      "NOPA": 1,
 	      "NOM": 1,
 	      "WLOC": 3,
 	      "NOPA": 11,
@@ -88,8 +131,8 @@ function redraw() {
 	    }
 	  },
 	  {"id": "2", "parent": "1", "name": "String",
-	    "metric": {
-	      "NOA": 2,
+	    "metrics": {
+	      "NOPA": 2,
 	      "NOM": 3,
 	      "WLOC": 5,
 	      "NOPA": 9,
@@ -97,8 +140,8 @@ function redraw() {
 	    }
 	  },
 	  {"id": "3", "parent": "1", "name": "List",
-	    "metric": {
-	      "NOA": 5,
+	    "metrics": {
+	      "NOPA": 5,
 	      "NOM": 7,
 	      "WLOC": 8,
 	      "NOPA": 3,
@@ -107,8 +150,8 @@ function redraw() {
 	    }
 	  },
 	  {"id": "4", "parent": "3", "name": "LinkedList",
-	    "metric": {
-	      "NOA": 7,
+	    "metrics": {
+	      "NOPA": 7,
 	      "NOM": 9,
 	      "WLOC": 10,
 	      "NOPA": 4,
@@ -116,8 +159,8 @@ function redraw() {
 	    }
 	  },
 	  {"id": "5", "parent": "3", "name": "ArrayList",
-	    "metric": {
-	      "NOA": 9,
+	    "metrics": {
+	      "NOPA": 9,
 	      "NOM": 13,
 	      "WLOC": 12,
 	      "NOPA": 4,
@@ -125,8 +168,8 @@ function redraw() {
 	    }
 	  },
 	  {"id": "6", "parent": "", "name": "NULL",
-	    "metric": {
-	      "NOA": 12,
+	    "metrics": {
+	      "NOPA": 12,
 	      "NOM": 17,
 	      "WLOC": 19,
 	      "NOPA": 4,
@@ -137,15 +180,24 @@ function redraw() {
 
 	var layout = $('#layout').find(':selected').attr('value');
 
+	var metrics = {};
+
+	metrics.x = $('#position-x').find(':selected').attr('value'),
+	metrics.y = $('#position-y').find(':selected').attr('value'),
+	metrics.width = $('#width').find(':selected').attr('value'),
+	metrics.height = $('#height').find(':selected').attr('value'),
+	metrics.color = $('#color').find(':selected').attr('value'),
+	metrics.sort = $('#sort').find(':selected').attr('value');
+
 	switch(layout) {
 		case 'scatter':
-			scatter(example);
+			scatter(example, metrics);
 			break;
 		case 'tree':
-			tree(example);
+			tree(example, metrics);
 			break;
 		case 'treemap':
-			treemap(example);
+			treemap(example, metrics);
 			break;
 		default:
 	}
