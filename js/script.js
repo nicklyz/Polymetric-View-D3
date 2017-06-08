@@ -47,23 +47,25 @@ function makeForm() {
 
 	htmlForm.append($('<span>').text('view: '));
 	htmlForm.append($('<select>', { id: ('view'), onchange: 'adjustDimsAndRedraw()'}));
-	$(spec.views).each(function(vi, v) {
-		$('#view').append($('<option>', { value: v.name }).text(v.title));
-	});
+
+	for (var i = 0; i < spec.views.length; i++) {
+		$('#view').append($('<option>', { value: spec.views[i].name }).text(spec.views[i].title));
+	}
 
 	htmlForm.append($('<span>').text('  layout: '));
 	htmlForm.append($('<select>', { id: ('layout'), onchange: 'adjustDimsAndRedraw()'}));
-	$(spec.layouts).each(function(li, l) {
-		$('#layout').append($('<option>', { value: l.name }).text(l.title));
-	});
 
-	$(spec.dimensions).each(function(di, d) {
-		htmlForm.append($('<span>').text("  " + d + ": "));
-		htmlForm.append($('<select>', { id: d, onchange: 'redraw()'}));		// add some onclick logic here
-		$(spec.metrics).each(function(mi, m) {
-			$('#' + d).append($('<option>', { value: m }).text(m));
-		});
-	});
+	for (var i = 0; i < spec.layouts.length; i++) {
+		$('#layout').append($('<option>', { value: spec.layouts[i].name }).text(spec.layouts[i].title));
+	}
+
+	for (var i = 0; i < spec.dimensions.length; i++) {
+		htmlForm.append($('<span>').text("  " + spec.dimensions[i] + ": "));
+		htmlForm.append($('<select>', { id: spec.dimensions[i], onchange: 'redraw()'}));
+		for (var j = 0; j < spec.metrics.length; j++) {
+			$('#' + spec.dimensions[i]).append($('<option>', { value: spec.metrics[j] }).text(spec.metrics[j]));
+		}
+	}
 	adjustDimsAndRedraw();
 }
 
