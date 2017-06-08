@@ -2,7 +2,7 @@ var spec = {};
 spec.dimensions = ['position-x', 'position-y', 'width', 'height', 'color', 'sort'];
 spec.metrics = ['NOPA', 'NOM', 'WLOC', 'WMC', 'NOAM', 'BUR', 'AMW', 'NAS', 'BOvR'];
 spec.layouts = [		// add more plot types here
-	{name: 'scatter', title: 'Scatter Plot', dimensions: ['position(x)', 'position(y)', 'width', 'height', 'color']},
+	{name: 'scatter', title: 'Scatter Plot', dimensions: ['position-x', 'position-y', 'width', 'height', 'color']},
 	{name: 'tree', title: 'Tree Plot', dimensions: ['width', 'height', 'color']},
 	{name: 'treemap', title: 'Tree Map', dimensions: ['width', 'height', 'color', 'sort']},
 	{name: 'checker', title: 'Checker Plot', dimensions: ['width', 'height', 'color', 'sort']},
