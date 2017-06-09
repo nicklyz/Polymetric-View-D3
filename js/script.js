@@ -199,6 +199,8 @@ function redraw(data) {
 		case 'treemap':
 			treemap(example, metrics);
 			break;
+		case 'checker':
+			checker(example, metrics);
 		default:
 	}
 }
