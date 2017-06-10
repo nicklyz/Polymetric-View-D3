@@ -48,7 +48,7 @@ MSE.parse = function(content){
             	// console.log(item.name[0])
                 namespaces[item.id[0]] = item.name[0];
                 break;
-NOPA, NOM, WLOC, WMC, NOAM, BUR, AMW, NAS, BOvR
+
             case "Class":
                 if (item.id[0] in dict) {
                     dict[item.id[0]]["name"] = item.name[0];
@@ -72,12 +72,12 @@ NOPA, NOM, WLOC, WMC, NOAM, BUR, AMW, NAS, BOvR
                 subclass = item.subclass[0].ref;
                 parent = item.superclass[0].ref;
                 if (subclass in dict) {
-                    dict[subclass]["parent"]=Math.max(dict[subclass]["parent"],parent);
+                    dict[subclass]["parent"]=Math.max(dict[subclass]["parent"],parent).toString();
                 }
                 else {
                     dict[subclass] = {
                         // "subclass": [],
-                        "parent": parent
+                        "parent": parent.toString()
                     };
                 }
                 // if (parent in dict) {

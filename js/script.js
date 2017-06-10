@@ -1,6 +1,6 @@
 var spec = {};
 spec.dimensions = ['position-x', 'position-y', 'width', 'height', 'color', 'sort'];
-spec.metrics = ['NOPA', 'NOM', 'WLOC', 'WMC', 'NOAM', 'BUR', 'AMW', 'NAS', 'BOvR'];
+spec.metrics = ['N/A', 'NOPA', 'NOM', 'WLOC', 'WMC', 'NOAM', 'BUR', 'AMW', 'NAS', 'BOvR'];
 spec.layouts = [		// add more plot types here
 	{name: 'scatter', title: 'Scatter Plot', dimensions: ['position-x', 'position-y', 'width', 'height', 'color']},
 	{name: 'tree', title: 'Tree Plot', dimensions: ['width', 'height', 'color']},
@@ -8,6 +8,12 @@ spec.layouts = [		// add more plot types here
 	{name: 'checker', title: 'Checker Plot', dimensions: ['width', 'height', 'color', 'sort']},
 ];
 var parsed_data = null;
+
+spec.views = [
+	{name: 'custom', title: 'Custom View'},
+	{name: 'hotspots', title: 'System Hotspots View', layout: 'checker', defaults: ['NOPA', 'NOM', 'WLOC', 'NOPA']},
+	{name: 'complexity', title: 'System Complexity View', layout: 'tree', defaults: ['NOPA', 'NOM', 'WLOC']}
+];
 
 function parseFile() {
 	var fileInput = document.getElementById('fileInput');
@@ -41,36 +47,74 @@ function parseFile() {
 function makeForm() {
 	var htmlForm = $('form');
 
-	htmlForm.append($('<span>').text('layout: '));
-	htmlForm.append($('<select>', { id: ('layout'), onchange: 'adjustDimsAndRedraw()'}));	// add some onclick logic here
-	$(spec.layouts).each(function(pi, p) {
-		$('#layout').append($('<option>', { value: p.name }).text(p.title));
-	});
+	htmlForm.append($('<span>').text('view: '));
+	htmlForm.append($('<select>', { id: ('view'), onchange: 'adjustDimsAndRedraw()'}));
 
-	$(spec.dimensions).each(function(di, d) {
-		htmlForm.append($('<span>').text(d + ": "));
-		htmlForm.append($('<select>', { id: d, onchange: 'redraw()'}));		// add some onclick logic here
-		$(spec.metrics).each(function(mi, m) {
-			$('#' + d).append($('<option>', { value: m }).text(m));
-		});
-	});
+	for (var i = 0; i < spec.views.length; i++) {
+		$('#view').append($('<option>', { value: spec.views[i].name }).text(spec.views[i].title));
+	}
+
+	htmlForm.append($('<span>').text('  layout: '));
+	htmlForm.append($('<select>', { id: ('layout'), onchange: 'adjustDimsAndRedraw()'}));
+
+	for (var i = 0; i < spec.layouts.length; i++) {
+		$('#layout').append($('<option>', { value: spec.layouts[i].name }).text(spec.layouts[i].title));
+	}
+
+	for (var i = 0; i < spec.dimensions.length; i++) {
+		htmlForm.append($('<span>').text("  " + spec.dimensions[i] + ": "));
+		htmlForm.append($('<select>', { id: spec.dimensions[i], onchange: 'redraw()'}));
+		for (var j = 0; j < spec.metrics.length; j++) {
+			$('#' + spec.dimensions[i]).append($('<option>', { value: spec.metrics[j] }).text(spec.metrics[j]));
+		}
+	}
 	adjustDimsAndRedraw();
 }
 
 function adjustDimsAndRedraw() {
-	var layout = $('#layout').find(':selected').attr('value');
-	var dimensions;
-	for (var i = spec.layouts.length - 1; i >= 0; i--) {
-		if (spec.layouts[i].name === layout) {
-			dimensions = spec.layouts[i].dimensions;
+	var view = $('#view').find(':selected').attr('value');
+
+	if (view === 'custom') {
+		$('#layout').removeAttr('disabled');
+		var layout = $('#layout').find(':selected').attr('value');
+		var dimensions;
+		for (var i = spec.layouts.length - 1; i >= 0; i--) {
+			if (spec.layouts[i].name === layout) {
+				dimensions = spec.layouts[i].dimensions;
+			}
+		}
+		for (var i = spec.dimensions.length - 1; i >= 0; i--) {
+			if (dimensions.includes(spec.dimensions[i])) {
+				$('#' + spec.dimensions[i]).removeAttr('disabled');
+			}
+			else {
+				$('#' + spec.dimensions[i]).attr('disabled', true);
+			}
 		}
 	}
-	for (var i = spec.dimensions.length - 1; i >= 0; i--) {
-		if (dimensions.includes(spec.dimensions[i])) {
-			$('#' + spec.dimensions[i]).removeAttr('disabled');
+	else {
+		var layout;
+		var dimensions;
+		var defaults;
+		for (var i = spec.views.length - 1; i >= 0; i--) {
+			if (spec.views[i].name === view) {
+				layout = spec.views[i].layout;
+				defaults = spec.views[i].defaults;
+			}
 		}
-		else {
+		for (var i = spec.layouts.length - 1; i >= 0; i--) {
+			if (spec.layouts[i].name === layout) {
+				dimensions = spec.layouts[i].dimensions;
+			}
+		}
+		$('#layout').attr('disabled', true);
+		$('#layout option[value="' + layout + '"]').prop("selected", true);
+		for (var i = spec.dimensions.length - 1; i >= 0; i--) {
 			$('#' + spec.dimensions[i]).attr('disabled', true);
+			$('#' + spec.dimensions[i] + ' option[value="N/A"]').prop("selected", true);
+		}
+		for (var i = dimensions.length - 1; i >= 0; i--) {
+			$('#' + dimensions[i] + ' option[value="' + defaults[i] + '"]').prop("selected", true);
 		}
 	}
 	redraw();
@@ -164,6 +208,8 @@ function redraw(data) {
 		case 'treemap':
 			treemap(parsed_data, metrics);
 			break;
+		case 'checker':
+			checker(example, metrics);
 		default:
 	}
 }
