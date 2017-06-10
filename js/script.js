@@ -4,7 +4,7 @@ spec.metrics = ['N/A', 'NOPA', 'NOM', 'WLOC', 'WMC', 'NOAM', 'BUR', 'AMW', 'NAS'
 spec.layouts = [		// add more plot types here
 	{name: 'scatter', title: 'Scatter Plot', dimensions: ['position-x', 'position-y', 'width', 'height', 'color']},
 	{name: 'tree', title: 'Tree Plot', dimensions: ['width', 'height', 'color']},
-	{name: 'treemap', title: 'Tree Map', dimensions: ['width', 'height', 'color', 'sort']},
+	{name: 'treemap', title: 'Tree Map', dimensions: ['color', 'sort']},
 	{name: 'checker', title: 'Checker Plot', dimensions: ['width', 'height', 'color', 'sort']},
 ];
 spec.views = [
@@ -23,17 +23,16 @@ function parseFile() {
 		var reader = new FileReader();
 
 		reader.onload = function(e) {
-			//fileDisplayArea.innerText = reader.result;	// replace the following with interesting logic
+			
+			$('#loading').show();
+			setTimeout(function() {
+		        var result = MSE.parse(reader.result)
 
-			var result = MSE.parse(reader.result)
-			// var printData = JSON.stringify(result.slice(0,1000), null, 2)
+				var printData = JSON.stringify(result,null,4)
 
-			var printData = JSON.stringify(result,null,4)
-			// fileDisplayArea.innerText = printData
-
-			redraw(result);
-
-			// fileDisplayArea.innerText = printData;
+				redraw(result);
+		        $("#loading").hide();
+		    },1); // give it a moment to redraw
 		}
 
 		reader.readAsText(file);
