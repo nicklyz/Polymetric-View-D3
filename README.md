@@ -26,7 +26,7 @@ The project page can be found [**here**](https://nicklyz.github.io/Polymetric-Vi
 * Checker Plot :     A series of checker-like mapping of classes to rectangles with a maximum of four parameters to display  
 * Interactive Tree :  Our experimentation of interactive tree that can expand or collapse with only two parameters to display  
    
-## Matrix Parameter Avaliable in Our Project:  
+## Matrix Parameters Avaliable in Our Project:  
 * NOM              Number of methods  
 * NOPA             Number of public attributes  
 * WLOC             Sum of LOC over all methods  
