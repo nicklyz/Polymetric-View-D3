@@ -1,233 +1,319 @@
 function tree(data, metrics) {
-  // var source = PMV.fillRoots(data);
-  var roots = PMV.treeify(data);
+    // build hierachy data
+    var roots = PMV.treeify(data);
+    var treeData = roots.length == 1 ? roots : {"name": "root", "children": roots};
+    var wmax = d3.max(data, function(d) { return PMV.getMetric(d, metrics.width) });
+    var hmax = d3.max(data, function(d) { return PMV.getMetric(d, metrics.height) });
+    var wscale = d3.scale.linear()
+        .domain([0, wmax])
+        .rangeRound([5, 50]);
 
-  var root = roots.length == 1 ? roots : {"name": "root", "children": roots};
-  console.log(root);
-  height = 800;
-  // this cannot have multiple roots
-  // var root = d3.stratify()
-  //     .id(function(d) { return d.id; })
-  //     .parentId(function(d) { return d.parent; })
-  //     (source);
+    var hscale = d3.scale.linear()
+        .domain([0, hmax])
+        .rangeRound([5, 50]);
 
-  var i = 0,
-      duration = 750,
-      rectW = 60,
-      rectH = 30;
+    var fscale = d3.scale.linear()
+        .domain([0, d3.max(data, function (d) { return PMV.getMetric(d, metrics.color); })])
+        .range([100,0]);
 
-  var wmax = d3.max(data, function(d) { return PMV.getMetric(d, metrics.width) });
-  var hmax = d3.max(data, function(d) { return PMV.getMetric(d, metrics.height) });
+    // Calculate total nodes, max label length
+    var totalNodes = 0;
+    var maxLabelLength = 0;
 
-  var wscale = d3.scale.linear()
- 	  .domain([0, wmax])
-    .rangeRound([5, 50]);
+    // Misc. variables
+    var i = 0;
+    var duration = 750;
+    var root;
 
-  var hscale = d3.scale.linear()
-    .domain([0, hmax])
-    .rangeRound([5, 50]);
+    // size of the diagram
+    var viewerWidth = $(document).width();
+    var viewerHeight = $(document).height();
 
-  var tree = d3.layout.tree().nodeSize([70, 40]);
-  var diagonal = d3.svg.diagonal()
-      .projection(function (d) {
-        return [d.x, d.y];
-  });
-  // delete the previous chart
-  d3.selectAll("svg").remove();
+    // delete the previous chart
+    d3.selectAll("g").remove();
+    d3.selectAll("svg").remove();
 
-  var svg = d3.select("body").append("svg").attr("width", 1000).attr("height", 1000)
-      .call(zm = d3.behavior.zoom().scaleExtent([1,3]).on("zoom", redraw)).append("g")
-      .attr("transform", "translate(" + 350 + "," + 20 + ")");
+    var tree = d3.layout.tree()
+        .size([viewerHeight, viewerWidth]);
 
-  //necessary so that zoom knows where to zoom and unzoom from
-  zm.translate([350, 20]);
+    // define a d3 diagonal projection for use by the node paths later on.
+    var diagonal = d3.svg.diagonal()
+        .projection(function(d) {
+            return [d.y, d.x];
+        });
 
-  root.x0 = 0;
-  root.y0 = height / 2;
+    // A recursive helper function for performing some setup by walking through all nodes
 
-  function collapse(d) {
-      if (d.children) {
-          d._children = d.children;
-          d._children.forEach(collapse);
-          d.children = null;
-      }
-  }
+    function visit(parent, visitFn, childrenFn) {
+        if (!parent) return;
 
-  root.children.forEach(collapse);
-  update(root);
+        visitFn(parent);
 
-  function update(source) {
-      // Compute the new tree layout.
-      var nodes = tree.nodes(root).reverse(),
-          links = tree.links(nodes);
+        var children = childrenFn(parent);
+        if (children) {
+            var count = children.length;
+            for (var i = 0; i < count; i++) {
+                visit(children[i], visitFn, childrenFn);
+            }
+        }
+    }
 
-      // Normalize for fixed-depth.
-      nodes.forEach(function (d) {
-          d.y = d.depth * 180;
-      });
+    // Call visit function to establish maxLabelLength
+    visit(treeData, function(d) {
+        totalNodes++;
+        maxLabelLength = Math.max(d.name.length, maxLabelLength);
+    }, function(d) {
+        return d.children && d.children.length > 0 ? d.children : null;
+    });
 
-      // Update the nodes…
-      var node = svg.selectAll("g.node")
-          .data(nodes, function (d) {
-          return d.id || (d.id = ++i);
-      });
+    // Define the zoom function for the zoomable tree
 
-      // Enter any new nodes at the parent's previous position.
-      var nodeEnter = node.enter().append("g")
-          .attr("class", "node")
-          .attr("transform", function (d) {
-          return "translate(" + source.x0 + "," + source.y0 + ")";
-      })
-          .on("click", click);
+    function zoom() {
+        svgGroup.attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
+    }
 
-      nodeEnter.append("rect")
+    // define the zoomListener which calls the zoom function on the "zoom" event constrained within the scaleExtents
+    var zoomListener = d3.behavior.zoom().scaleExtent([0.1, 3]).on("zoom", zoom);
+
+    // define the baseSvg, attaching a class for styling and the zoomListener
+    var baseSvg = d3.select("#body").append("svg")
+        .attr("width", viewerWidth)
+        .attr("height", viewerHeight)
+        .attr("class", "overlay")
+        .call(zoomListener);
+
+    // Helper functions for collapsing and expanding nodes.
+
+    function collapse(d) {
+        if (d.children) {
+            d._children = d.children;
+            d._children.forEach(collapse);
+            d.children = null;
+        }
+    }
+
+    function expand(d) {
+        if (d._children) {
+            d.children = d._children;
+            d.children.forEach(expand);
+            d._children = null;
+        }
+    }
+
+    // Function to center node when clicked/dropped so node doesn't get lost when collapsing/moving with large amount of children.
+
+    function centerNode(source) {
+        scale = zoomListener.scale();
+        x = -source.y0;
+        y = -source.x0;
+        x = x * scale + viewerWidth / 2;
+        y = y * scale + viewerHeight / 2;
+        d3.select('g').transition()
+            .duration(duration)
+            .attr("transform", "translate(" + x + "," + y + ")scale(" + scale + ")");
+        zoomListener.scale(scale);
+        zoomListener.translate([x, y]);
+    }
+
+    // Toggle children function
+
+    function toggleChildren(d) {
+        if (d.children) {
+            d._children = d.children;
+            d.children = null;
+        } else if (d._children) {
+            d.children = d._children;
+            d._children = null;
+        }
+        return d;
+    }
+
+    // Toggle children on click.
+
+    function click(d) {
+        if (d3.event.defaultPrevented) return; // click suppressed
+        d = toggleChildren(d);
+        update(d);
+        centerNode(d);
+    }
+
+    function update(source) {
+        // Compute the new height, function counts total children of root node and sets tree height accordingly.
+        // This prevents the layout looking squashed when new nodes are made visible or looking sparse when nodes are removed
+        // This makes the layout more consistent.
+        var levelWidth = [1];
+        var childCount = function(level, n) {
+
+            if (n.children && n.children.length > 0) {
+                if (levelWidth.length <= level + 1) levelWidth.push(0);
+
+                levelWidth[level + 1] += n.children.length;
+                n.children.forEach(function(d) {
+                    childCount(level + 1, d);
+                });
+            }
+        };
+        childCount(0, root);
+        var newHeight = d3.max(levelWidth) * 25; // 25 pixels per line
+        // console.log(newHeight);
+        // tree = tree.size([newHeight, viewerWidth]);
+        tree = tree.size([viewerHeight, viewerWidth]);
+        // Compute the new tree layout.
+        var nodes = tree.nodes(root).reverse(),
+            links = tree.links(nodes);
+
+        // Set widths between levels based on maxLabelLength.
+        nodes.forEach(function(d) {
+            d.y = (d.depth * (maxLabelLength * 5)); //maxLabelLength * 10px
+            // alternatively to keep a fixed scale one can set a fixed depth per level
+            // Normalize for fixed-depth by commenting out below line
+            // d.y = (d.depth * 500); //500px per level.
+        });
+
+        // Update the nodes…
+        node = svgGroup.selectAll("g.node")
+            .data(nodes, function(d) {
+                return d.id || (d.id = ++i);
+            });
+
+        // Enter any new nodes at the parent's previous position.
+        var nodeEnter = node.enter().append("g")
+            // .call(dragListener)
+            .attr("class", "node")
+            .attr("transform", function(d) {
+                return "translate(" + source.y0 + "," + source.x0 + ")";
+            })
+            .on('click', click);
+
+        nodeEnter.append("rect")
+            .attr('class', 'nodeRect')
+            .attr("width", function (d) {
+                return wscale(PMV.getMetric(d, metrics.width));
+            })
+            .attr("height", function (d) {
+                return hscale(PMV.getMetric(d, metrics.height));
+            })
+            .attr("stroke", "black")
+            .attr("stroke-width", 1)
+            .style("fill", function(d) {
+                return d._children ? "lightsteelblue" : "#fff";
+            });
+
+        // Change the circle  depending on whether it has children and is collapsed
+        node.select("rect.nodeRect")
+            .attr("stroke", function(d) {
+                return d._children ? "red" : "black";
+            })
+            .style("fill", function(d) { return "hsl(200, 80%, " + fscale(PMV.getMetric(d, metrics.color)) + "%)" });
+
+        // Transition nodes to their new position.
+        var nodeUpdate = node.transition()
+            .duration(duration)
+            .attr("transform", function(d) {
+                return "translate(" + d.y + "," + d.x + ")";
+            });
+
+        // Transition exiting nodes to the parent's new position.
+        var nodeExit = node.exit().transition()
+            .duration(duration)
+            .attr("transform", function(d) {
+                return "translate(" + source.y + "," + source.x + ")";
+            })
+            .remove();
+
+        nodeExit.select("rect")
           .attr("width", function (d) {
-            console.log(PMV.getMetric(d, metrics.width));
             return wscale(PMV.getMetric(d, metrics.width));
           })
           .attr("height", function (d) {
             return hscale(PMV.getMetric(d, metrics.height));
           })
           .attr("stroke", "black")
-          .attr("stroke-width", 1)
-          .style("fill", function (d) {
-          return d._children ? "lightsteelblue" : "#fff";
-      });
-
-      // Transition nodes to their new position.
-      var nodeUpdate = node.transition()
-          .duration(duration)
-          .attr("transform", function (d) {
-          return "translate(" + d.x + "," + d.y + ")";
-      });
-
-      nodeUpdate.select("rect")
-          .attr("width", function (d) {
-            return wscale(PMV.getMetric(d, metrics.width));
-          })
-          .attr("height", function (d) {
-            return hscale(PMV.getMetric(d, metrics.height));
-          })
-          .attr("stroke", "black")
-          .attr("stroke-width", 1)
-          .style("fill", function (d) {
-          return d._children ? "lightsteelblue" : "#fff";
-      });
-
-      // nodeUpdate.select("text")
-      //     .style("fill-opacity", 1);
-
-      // Transition exiting nodes to the parent's new position.
-      var nodeExit = node.exit().transition()
-          .duration(duration)
-          .attr("transform", function (d) {
-          return "translate(" + source.x + "," + source.y + ")";
-      })
-          .remove();
-
-      nodeExit.select("rect")
-          .attr("width", function (d) {
-            return wscale(PMV.getMetric(d, metrics.width));
-          })
-          .attr("height", function (d) {
-            return hscale(PMV.getMetric(d, metrics.height));
-          })
-      //.attr("width", bbox.getBBox().width)""
-      //.attr("height", bbox.getBBox().height)
-      .attr("stroke", "black")
           .attr("stroke-width", 1);
 
-      // nodeExit.select("text");
+        // Update the links…
+        var link = svgGroup.selectAll("path.link")
+            .data(links, function(d) {
+                return d.target.id;
+            });
 
-      // Update the links…
-      var link = svg.selectAll("path.link")
-          .data(links, function (d) {
-          return d.target.id;
-      });
+        // Enter any new links at the parent's previous position.
+        link.enter().insert("path", "g")
+            .attr("class", "link")
+            .attr("d", function(d) {
+                var o = {
+                    x: source.x0,
+                    y: source.y0
+                };
+                return diagonal({
+                    source: o,
+                    target: o
+                });
+            });
 
-      // Enter any new links at the parent's previous position.
-      link.enter().insert("path", "g")
-          .attr("class", "link")
-          .attr("x", rectW / 2)
-          .attr("y", rectH / 2)
-          .attr("d", function (d) {
-          var o = {
-              x: source.x0,
-              y: source.y0
-          };
-          return diagonal({
-              source: o,
-              target: o
-          });
-      });
+        // Transition links to their new position.
+        link.transition()
+            .duration(duration)
+            .attr("d", diagonal);
 
-      // Transition links to their new position.
-      link.transition()
-          .duration(duration)
-          .attr("d", diagonal);
+        // Transition exiting nodes to the parent's new position.
+        link.exit().transition()
+            .duration(duration)
+            .attr("d", function(d) {
+                var o = {
+                    x: source.x,
+                    y: source.y
+                };
+                return diagonal({
+                    source: o,
+                    target: o
+                });
+            })
+            .remove();
 
-      // Transition exiting nodes to the parent's new position.
-      link.exit().transition()
-          .duration(duration)
-          .attr("d", function (d) {
-          var o = {
-              x: source.x,
-              y: source.y
-          };
-          return diagonal({
-              source: o,
-              target: o
-          });
-      })
-      .remove();
-
-      // Stash the old positions for transition.
-      nodes.forEach(function (d) {
-          d.x0 = d.x;
-          d.y0 = d.y;
-      });
-
-      link.each(function(d){
-          if (d.source.name == "root") {
-            d3.select(this).remove();
-          }
-      });
-      nodeEnter.each(function(d){
+        // Stash the old positions for transition.
+        nodes.forEach(function(d) {
+            d.x0 = d.x;
+            d.y0 = d.y;
+        });
+        // delete root node and root links
+        link.each(function(d){
+              if (d.source.name == "root") {
+                d3.select(this).remove();
+              }
+        });
+        nodeEnter.each(function(d){
           if (d.name == "root") {
             d3.select(this).remove();
           }
-      });
-      nodeUpdate.each(function(d){
+        });
+        nodeUpdate.each(function(d){
           if (d.name == "root") {
             d3.select(this).remove();
           }
-      });
-      nodeExit.each(function(d){
+        });
+        nodeExit.each(function(d){
           if (d.name == "root") {
             d3.select(this).remove();
           }
-      });
-      svg.selectAll("rect").call(tooltip());
+        });
+        svgGroup.selectAll("circle").call(tooltip());
+    }
 
-  }
+    // Append a group which holds all nodes and which the zoom Listener can act upon.
+    var svgGroup = baseSvg.append("g");
 
-  // Toggle children on click.
-  function click(d) {
-      if (d.children) {
-          d._children = d.children;
-          d.children = null;
-      } else {
-          d.children = d._children;
-          d._children = null;
-      }
-      update(d);
-  }
+    // Define the root
+    root = treeData;
+    root.x0 = viewerHeight / 2;
+    root.y0 = 0;
 
-  //Redraw for zoom
-  function redraw() {
-    //console.log("here", d3.event.translate, d3.event.scale);
-    svg.attr("transform",
-        "translate(" + d3.event.translate + ")"
-        + " scale(" + d3.event.scale + ")");
-  }
+	// Expand all children of roots children before rendering.
+	// root.children.forEach(function(child){
+	// 	collapse(child);
+	// });
+
+    // Layout the tree initially and center on the root node.
+    update(root);
+    centerNode(root);
 }

@@ -21,11 +21,11 @@ class PMV {
 
     var treeList = [];
     var lookup = {};
-    list.forEach(function(obj) {
+    $.each(list, function(idx, obj) {
         lookup[obj[idAttr]] = obj;
         obj[childrenAttr] = [];
     });
-    list.forEach(function(obj) {
+    $.each(list, function(idx, obj) {
         if (obj[parentAttr] != "" && obj[parentAttr] in lookup) {
             lookup[obj[parentAttr]][childrenAttr].push(obj);
         } else {
@@ -61,7 +61,7 @@ var tooltip = function(a) {
 				}
 			  div.html("");
 				div.append("h2").text(d.name);
-				div.append("p").attr("class", "filename").text(d.name);
+				div.append("p").attr("class", "namespace").text(d.namespace);
 				for (var p in d.metrics) {
 					div.append("p").text(p + ": " + d.metrics[p]);
 				}
