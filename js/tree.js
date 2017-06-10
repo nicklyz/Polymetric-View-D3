@@ -68,8 +68,6 @@ function tree(data, metrics) {
 
       nodeEnter.append("rect")
           .attr("width", function (d) {
-              console.log(d);
-              console.log(metrics.width);
             return PMV.getMetric(d, metrics.width);
           })
           .attr("height", function (d) {

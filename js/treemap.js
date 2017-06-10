@@ -1,11 +1,9 @@
 function treemap(data, metrics) {
-  var source = PMV.fillRoots(data)
-
-  // this cannot have multiple roots
-  var root = d3.stratify()
-      .id(function(d) { return d.id; })
-      .parentId(function(d) { return d.parent; })
-      (source);
+  var roots = [];
+  var namespaces = {};
+  $.each(data, function(idx, d) {
+      console.log(d.namespace);
+  });
 
   var color = d3.scale.category20c();
 

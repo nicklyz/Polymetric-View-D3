@@ -7,6 +7,7 @@ spec.layouts = [		// add more plot types here
 	{name: 'treemap', title: 'Tree Map', dimensions: ['width', 'height', 'color', 'sort']},
 	{name: 'checker', title: 'Checker Plot', dimensions: ['width', 'height', 'color', 'sort']},
 ];
+var parsed_data = null;
 
 function parseFile() {
 	var fileInput = document.getElementById('fileInput');
@@ -134,6 +135,13 @@ function redraw(data) {
 	    }
 	  }
 	];
+	if (data != undefined) {
+		console.log("hello");
+		parsed_data = data;
+	}
+	if (parsed_data == undefined) {
+		return;
+	}
 
 	var layout = $('#layout').find(':selected').attr('value');
 
@@ -148,16 +156,14 @@ function redraw(data) {
 
 	switch(layout) {
 		case 'scatter':
-			scatter(example, metrics);
+			scatter(parsed_data, metrics);
 			break;
 		case 'tree':
-			tree(example, metrics);
+			tree(parsed_data, metrics);
 			break;
 		case 'treemap':
-			treemap(example, metrics);
+			treemap(parsed_data, metrics);
 			break;
 		default:
 	}
 }
-
-redraw();
