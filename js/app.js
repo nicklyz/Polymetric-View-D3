@@ -1,27 +1,40 @@
 class PMV {
   static fillRoots(data) {
     var root = {
-      "id": -1,
+      "id": "root",
       "parent": "",
       "name": "root",
-      "metric": {}
+      "metrics": {}
     }
     data.forEach(function(d) {
       if (d.parent == "") {
-        d.parent = -1;
+        d.parent = "root";
       }
     });
     data.push(root)
     return data;
   }
+  static treeify(list, idAttr, parentAttr, childrenAttr) {
+    if (!idAttr) idAttr = 'id';
+    if (!parentAttr) parentAttr = 'parent';
+    if (!childrenAttr) childrenAttr = 'children';
 
+    var treeList = [];
+    var lookup = {};
+    list.forEach(function(obj) {
+        lookup[obj[idAttr]] = obj;
+        obj[childrenAttr] = [];
+    });
+    list.forEach(function(obj) {
+        if (obj[parentAttr] != "" && obj[parentAttr] in lookup) {
+            lookup[obj[parentAttr]][childrenAttr].push(obj);
+        } else {
+            treeList.push(obj);
+        }
+    });
+    return treeList;
+  };
   static getMetric(d, metric) {
-    // data: {
-    //   "NOA": int,
-    //   "NOM": int,
-    //   "WLOC": int,
-    //   ...
-    // }
     var data;
     if(d.hasOwnProperty('data')) {
       data = d.data.metrics;
@@ -49,8 +62,8 @@ var tooltip = function(a) {
 			  div.html("");
 				div.append("h2").text(d.name);
 				div.append("p").attr("class", "filename").text(d.name);
-				for (var p in d.metric) {
-						div.append("p").text(p + ": " + d.metric[p]);
+				for (var p in d.metrics) {
+					div.append("p").text(p + ": " + d.metrics[p]);
 				}
 				var ttx = d3.event.pageX;
 				var tty = d3.event.pageY - $("div.tooltip").height() - 15;
