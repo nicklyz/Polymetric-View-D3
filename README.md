@@ -39,11 +39,12 @@ The project page can be found [**here**](https://nicklyz.github.io/Polymetric-Vi
 Note: The above parameters are all in class level, since our project scope does not dive into method details
 
 ## Avaliable Attributes Parameter in Each Layout:
-* position-x: x position representation of each rectangle/node/circle, only avaliable in Checker Plot
-* position-y: y position representation of each rectangle/node/circle, only avaliable in Checker Plot
-* width:       width representation of each rectangle/node/circle, avaliable in all layouts
-* height:      height representation of each rectangle/node/circle, not avaliable in Iteractive Tree
-* color:      range of color representation of each rectangle/node/circle, only avaliable checker Plot and Tree Map 
+* position-x:  X position representation of each rectangle/node/circle, only avaliable in Checker Plot
+* position-y:  Y position representation of each rectangle/node/circle, only avaliable in Checker Plot
+* width:       Width representation of each rectangle/node/circle, avaliable in all layouts
+* height:      Height representation of each rectangle/node/circle, not avaliable in Iteractive Tree
+* color:       Range of color representation of each rectangle/node/circle, avaliable in all layouts
+* sort:        The parameter we use to sort rectangles/nodes/circles, only avaliable in Checker Plot and Tree Map
 
 ## Pre-Formated Layouts:
 We provide two pre-formatted views that help user to get started (Once a MSE file is uploaded):
