@@ -62,8 +62,8 @@ var tooltip = function(a) {
 			  div.html("");
 				div.append("h2").text(d.name);
 				div.append("p").attr("class", "filename").text(d.name);
-				for (var p in d.metric) {
-						div.append("p").text(p + ": " + d.metric[p]);
+				for (var p in d.metrics) {
+					div.append("p").text(p + ": " + d.metrics[p]);
 				}
 				var ttx = d3.event.pageX;
 				var tty = d3.event.pageY - $("div.tooltip").height() - 15;
