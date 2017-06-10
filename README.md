@@ -2,6 +2,7 @@
 
 ## Spring 2017 UCLA with Prof. Kim
 
+## Team Member & Contributers:
 Yanzhe Liu      nikeliuyanzhe@gmail.com   
 Mushi Zhou      zmushi@gmail.com       
 Quanjie Geng    scmun.gengqj@gmail.com   
