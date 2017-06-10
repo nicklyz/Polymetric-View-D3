@@ -4,7 +4,7 @@ function checker(data, metrics) {
 	var w = 2000
 	var h = 2000
 
-	data.sort(function(da, db) { return PMV.getMetric(da, metrics.sort) - PMV.getMetric(db, metrics.sort); })
+	data.sort(function(da, db) { return PMV.getMetric(db, metrics.sort) - PMV.getMetric(da, metrics.sort); })
 
 
 	var wmax = d3.max(data, function(d) { return PMV.getMetric(d, metrics.width) });
@@ -53,7 +53,7 @@ function findPosition(data,wscale,metrics){
     var pad = 50
 
 	var SPACING = 10
-	var max_number = 3
+	var max_number = 50
 	var curr_number = 0
 	var length_sum = left_pad
 
