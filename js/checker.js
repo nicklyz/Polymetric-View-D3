@@ -6,11 +6,11 @@ function checker(data, metrics) {
 
 	data.sort(function(da, db) { return PMV.getMetric(da, metrics.sort) - PMV.getMetric(db, metrics.sort); })
 
-  
+
 	var wmax = d3.max(data, function(d) { return PMV.getMetric(d, metrics.width) });
 	var hmax = d3.max(data, function(d) { return PMV.getMetric(d, metrics.height) });
-	
-  
+
+
 	var wscale = d3.scale.linear()
  	.domain([0, wmax])
     .rangeRound([5, 50]);
@@ -18,7 +18,7 @@ function checker(data, metrics) {
   	var hscale = d3.scale.linear()
     .domain([0, hmax])
     .rangeRound([5, 50]);
-  
+
 	var fscale = d3.scale.linear()
     .domain([0, d3.max(data, function(d) { return PMV.getMetric(d, metrics.color) })])
     .range([100, 0]);
@@ -43,13 +43,14 @@ function checker(data, metrics) {
     .attr("width", function(d) { return wscale(PMV.getMetric(d, metrics.width)) })
     .attr("height", function(d) { return hscale(PMV.getMetric(d, metrics.height)) })
 		.attr("shape-rendering", "crispEdges")
-    .style("fill", function(d) { return "hsl(200, 80%, " + fscale(PMV.getMetric(d, metrics.color)) + "%)" });
+    .style("fill", function(d) { return "hsl(200, 80%, " + fscale(PMV.getMetric(d, metrics.color)) + "%)" })
+		.call(tooltip());
 }
 
 function findPosition(data,wscale,metrics){
 
     var left_pad = 100;
-    var pad = 50 
+    var pad = 50
 
 	var SPACING = 10
 	var max_number = 3
@@ -81,4 +82,3 @@ function findPosition(data,wscale,metrics){
 
 	return data
 }
-
