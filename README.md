@@ -65,6 +65,7 @@ We provide two pre-formatted views that help user to get started (Once a MSE fil
 *Example Repository of Similar Work: [https://github.com/softvis/polymetric-views](https://github.com/softvis/polymetric-views)      
 *Tutorial for generating MSE: [http://www.themoosebook.org/book/#h1thefamixfamilyofmeta-models](http://www.themoosebook.org/book/#h1thefamixfamilyofmeta-models)  
 *IPlasma tool for generating MSE: [http://loose.upt.ro/iplasma/](http://loose.upt.ro/iplasma/)       
-*Our Project Page: [https://github.com/nicklyz/Polymetric-View-D3](http://dl.acm.org/citation.cfm?id=942788)        
+*Our Project Page: [https://github.com/nicklyz/Polymetric-View-D3](http://dl.acm.org/citation.cfm?id=942788)    
+*Our Github Repository: [https://github.com/nicklyz/Polymetric-View-D3](https://github.com/nicklyz/Polymetric-View-D3)    
 
 :+1:
