@@ -1,12 +1,12 @@
 # CS 230 Project: Polymetric Views in D3
 
-## Spring 2017 UCLA Prof. Kim
+## Spring 2017 UCLA with Prof. Kim
 
-##### Yanzhe Liu      nikeliuyanzhe@gmail.com   
-##### Mushi Zhou      zmushi@gmail.com       
-##### Quanjie Geng    scmun.gengqj@gmail.com   
-##### Xiao Yan        yanxiao0201@ucla.edu    
-##### Daniel Lau      daniel.s.lau@gmail.com    
+Yanzhe Liu      nikeliuyanzhe@gmail.com   
+Mushi Zhou      zmushi@gmail.com       
+Quanjie Geng    scmun.gengqj@gmail.com   
+Xiao Yan        yanxiao0201@ucla.edu    
+Daniel Lau      daniel.s.lau@gmail.com    
 
 
 ## Description:
