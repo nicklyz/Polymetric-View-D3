@@ -22,7 +22,7 @@ function checker(data, metrics) {
 
 	var fscale = d3.scale.linear()
     .domain([0, d3.max(data, function(d) { return PMV.getMetric(d, metrics.color) })])
-    .range([100, 0]);
+    .range([200, 0]);
 
 
 	newdata = findPosition(data,wscale,metrics)
@@ -44,7 +44,8 @@ function checker(data, metrics) {
     .attr("width", function(d) { return wscale(PMV.getMetric(d, metrics.width)) })
     .attr("height", function(d) { return hscale(PMV.getMetric(d, metrics.height)) })
 		.attr("shape-rendering", "crispEdges")
-    .style("fill", function(d) { return "hsl(200, 80%, " + fscale(PMV.getMetric(d, metrics.color)) + "%)" })
+    //.style("fill", function(d) { return "hsl(200, 80%, " + fscale(PMV.getMetric(d, metrics.color)) + "%)" })
+    .style("fill", function(d) { return "hsl(" + fscale(PMV.getMetric(d, metrics.color)) + ", 80%, 50%)" })
 		.call(tooltip());
 }
 
