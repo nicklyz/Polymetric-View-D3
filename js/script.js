@@ -210,6 +210,7 @@ function redraw(data) {
 			break;
 		case 'checker':
 			checker(parsed_data, metrics);
+			break;
 		default:
 	}
 }
