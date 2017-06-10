@@ -1,17 +1,31 @@
 function tree(data, metrics) {
-  var source = PMV.fillRoots(data);
+  // var source = PMV.fillRoots(data);
+  var roots = PMV.treeify(data);
 
+  var root = roots.length == 1 ? roots : {"name": "root", "children": roots};
+  console.log(root);
   height = 800;
   // this cannot have multiple roots
-  var root = d3.stratify()
-      .id(function(d) { return d.id; })
-      .parentId(function(d) { return d.parent; })
-      (source);
+  // var root = d3.stratify()
+  //     .id(function(d) { return d.id; })
+  //     .parentId(function(d) { return d.parent; })
+  //     (source);
 
   var i = 0,
       duration = 750,
       rectW = 60,
       rectH = 30;
+
+  var wmax = d3.max(data, function(d) { return PMV.getMetric(d, metrics.width) });
+  var hmax = d3.max(data, function(d) { return PMV.getMetric(d, metrics.height) });
+
+  var wscale = d3.scale.linear()
+ 	  .domain([0, wmax])
+    .rangeRound([5, 50]);
+
+  var hscale = d3.scale.linear()
+    .domain([0, hmax])
+    .rangeRound([5, 50]);
 
   var tree = d3.layout.tree().nodeSize([70, 40]);
   var diagonal = d3.svg.diagonal()
@@ -68,26 +82,17 @@ function tree(data, metrics) {
 
       nodeEnter.append("rect")
           .attr("width", function (d) {
-            return PMV.getMetric(d, metrics.width);
+            console.log(PMV.getMetric(d, metrics.width));
+            return wscale(PMV.getMetric(d, metrics.width));
           })
           .attr("height", function (d) {
-            return PMV.getMetric(d, metrics.height);
+            return hscale(PMV.getMetric(d, metrics.height));
           })
           .attr("stroke", "black")
           .attr("stroke-width", 1)
           .style("fill", function (d) {
           return d._children ? "lightsteelblue" : "#fff";
       });
-
-      //
-      // nodeEnter.append("text")
-      //     .attr("x", rectW / 2)
-      //     .attr("y", rectH / 2)
-      //     .attr("dy", ".35em")
-      //     .attr("text-anchor", "middle")
-      //     .text(function (d) {
-      //     return d.data.name;
-      // });
 
       // Transition nodes to their new position.
       var nodeUpdate = node.transition()
@@ -98,10 +103,10 @@ function tree(data, metrics) {
 
       nodeUpdate.select("rect")
           .attr("width", function (d) {
-            return PMV.getMetric(d, metrics.width);
+            return wscale(PMV.getMetric(d, metrics.width));
           })
           .attr("height", function (d) {
-            return PMV.getMetric(d, metrics.height);
+            return hscale(PMV.getMetric(d, metrics.height));
           })
           .attr("stroke", "black")
           .attr("stroke-width", 1)
@@ -122,10 +127,10 @@ function tree(data, metrics) {
 
       nodeExit.select("rect")
           .attr("width", function (d) {
-            return PMV.getMetric(d, metrics.width);
+            return wscale(PMV.getMetric(d, metrics.width));
           })
           .attr("height", function (d) {
-            return PMV.getMetric(d, metrics.height);
+            return hscale(PMV.getMetric(d, metrics.height));
           })
       //.attr("width", bbox.getBBox().width)""
       //.attr("height", bbox.getBBox().height)
@@ -174,7 +179,7 @@ function tree(data, metrics) {
               target: o
           });
       })
-          .remove();
+      .remove();
 
       // Stash the old positions for transition.
       nodes.forEach(function (d) {
@@ -183,7 +188,22 @@ function tree(data, metrics) {
       });
 
       link.each(function(d){
-          if (d.source.data.name == "root") {
+          if (d.source.name == "root") {
+            d3.select(this).remove();
+          }
+      });
+      nodeEnter.each(function(d){
+          if (d.name == "root") {
+            d3.select(this).remove();
+          }
+      });
+      nodeUpdate.each(function(d){
+          if (d.name == "root") {
+            d3.select(this).remove();
+          }
+      });
+      nodeExit.each(function(d){
+          if (d.name == "root") {
             d3.select(this).remove();
           }
       });

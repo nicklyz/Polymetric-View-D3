@@ -209,7 +209,7 @@ function redraw(data) {
 			treemap(parsed_data, metrics);
 			break;
 		case 'checker':
-			checker(example, metrics);
+			checker(parsed_data, metrics);
 		default:
 	}
 }
