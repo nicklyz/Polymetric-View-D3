@@ -1,9 +1,9 @@
 function drawcolorbar(){
 
-    var w = 1000
-    var h = 35
+    var w = 80
+    var h = 200
 
-    d3.selectAll("svg").remove();
+    //d3.selectAll("svg").remove();
     var svg = d3.select("#colorbar")
             .append("svg")
             .attr("width", w)
@@ -19,8 +19,8 @@ function drawcolorbar(){
     linearGradient
     .attr("x1", "0%")
     .attr("y1", "0%")
-    .attr("x2", "100%")
-    .attr("y2", "0%");
+    .attr("x2", "0%")
+    .attr("y2", "100%");
 
 
     linearGradient.selectAll("stop") 
@@ -42,14 +42,14 @@ function drawcolorbar(){
  
 
     svg.append("rect")
-    .attr("width", 300)
-    .attr("height", 20)
-    .attr("x",100)
+    .attr("width", 20)
+    .attr("height", 120)
+    .attr("x",1)
     .style("fill", "url(#linear-gradient)");
 
     svg.append("text")
-    .attr("x", 90)
-    .attr("y", 30)
+    .attr("x", 25)
+    .attr("y", 15)
     .text("0")
     .attr("font-family", "sans-serif")
     .attr("font-size", "20px")
@@ -57,8 +57,8 @@ function drawcolorbar(){
 
 
     svg.append("text")
-    .attr("x", 400)
-    .attr("y", 30)
+    .attr("x", 25)
+    .attr("y", 120)
     .text("200")
     .attr("font-family", "sans-serif")
     .attr("font-size", "20px")
@@ -76,7 +76,7 @@ function scatter(data, metrics){
 
     d3.selectAll("svg").remove();
 
-    drawcolorbar()
+    //drawcolorbar()
 
     var svg = d3.select("#body")
             .append("svg")
@@ -144,3 +144,4 @@ function scatter(data, metrics){
 
 
 }
+

@@ -20,15 +20,21 @@
 </head>
 <body>
 
+
 	<h1>Polymetric Views</h1>
 
 	<div>
-		Select a MSE file:
-		<form>
-			<input type="file" id="fileInput" onchange="parseFile()"><br><br>
-		</form>
+		<div style="width: 90%; height: 100%; float:left;">
+			Select a MSE file:
+			<form>
+				<input type="file" id="fileInput" onchange="parseFile()"><br><br>
+			</form>
 
+		</div>
+
+		<div style="width: 10%; height: 100%; float:right;" id="colorbar"></div>
 	</div>
+
 
 	<div id="loading" class="sk-rotating-plane" style="display: none;"></div>
 
@@ -38,7 +44,7 @@
 		makeForm();
 	</script>
 
-	<div id="colorbar"></div>
+	
 
 	<div id="body"></div>
 </body>
