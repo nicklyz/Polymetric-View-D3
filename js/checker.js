@@ -47,7 +47,7 @@ function checker(data, metrics) {
 		.attr("shape-rendering", "crispEdges")
     //.style("fill", function(d) { return "hsl(200, 80%, " + fscale(PMV.getMetric(d, metrics.color)) + "%)" })
     .style("fill", function(d) { return "hsl(" + fscale(PMV.getMetric(d, metrics.color)) + ", 80%, 50%)" })
-		.call(tooltip());
+	.call(tooltip());
 }
 
 function findPosition(data,wscale,metrics){

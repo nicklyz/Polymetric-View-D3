@@ -19,7 +19,7 @@ function treemap(data, treeified_data, metrics) {
 
     var fscale = d3.scale.linear()
         .domain([0, d3.max(data, function (d) { return PMV.getMetric(d, metrics.color); })])
-        .range([100,20]);
+        .range([200,0]);
 
     var layout = d3.layout.treemap()
     	.size([viewerWidth, viewerHeight])
@@ -37,13 +37,13 @@ function treemap(data, treeified_data, metrics) {
         .data(nodes)
         .enter()
         .append("rect")
-        	.attr("x", function(d) { return d.x; })
-        	.attr("y", function(d) { return d.y + 1 })
-        	.attr("width", function(d) { return d.dx })
-        	.attr("height", function(d) { return d.dy })
-        	.attr("shape-rendering", "crispEdges")
-            .attr("stroke", "black")
-            .attr("stroke-width", 1)
-        .style("fill", function(d) { return "hsl(200, 80%, " + fscale(PMV.getMetric(d, metrics.color)) + "%)" })
+    	.attr("x", function(d) { return d.x; })
+    	.attr("y", function(d) { return d.y + 1 })
+    	.attr("width", function(d) { return d.dx })
+    	.attr("height", function(d) { return d.dy })
+    	.attr("shape-rendering", "crispEdges")
+        .attr("stroke", "black")
+        .attr("stroke-width", 1)
+        .style("fill", function(d) { return "hsl(" + fscale(PMV.getMetric(d, metrics.color)) + ", 80%, 50%)" })
         .call(tooltip());
 }

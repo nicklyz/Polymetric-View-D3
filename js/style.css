@@ -84,14 +84,13 @@ div.tooltip {
 
 .treeflower.node {
   cursor: pointer;
-  stroke: #3182bd;
-  stroke-width: 1.5px;
+  stroke-width: 1px;
 }
 
 .treeflower.link {
   fill: none;
   stroke: #9ecae1;
-  stroke-width: 1.5px;
+  stroke-width: 1px;
 }
 
 .tree.node {
