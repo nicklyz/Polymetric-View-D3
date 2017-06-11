@@ -2,11 +2,16 @@ function treeflower(data, treeified_data, metrics) {
     var treeData = treeified_data.length == 1 ? treeified_data : {"name": "root", "children": treeified_data};
     var rmax = d3.max(data, function(d) { return PMV.getMetric(d, metrics.width) });
     var rscale = d3.scale.linear()
-        .domain([0, rmax])
-        .rangeRound([5, 50]);
+                .domain([0, rmax])
+                .rangeRound([5, 25]);
+    var fscale = d3.scale.linear()
+                .domain([0, d3.max(data, function (d) { return PMV.getMetric(d, metrics.color); })])
+                .range([200,0]);
 
-    var viewerWidth = $(document).width();
-    var viewerHeight = $(document).height();
+    // var viewerWidth = $(document).width();
+    // var viewerHeight = $(document).height();
+    var viewerWidth = 1000;
+    var viewerHeight = 700;
 
     d3.selectAll("svg").remove();
 
@@ -17,25 +22,15 @@ function treeflower(data, treeified_data, metrics) {
 
     var force = d3.layout.force()
         .size([viewerWidth, viewerHeight])
-        .on("tick", tick);
-
-    // var svg = d3.select("body").append("svg")
-    //     .attr("width", width)
-    //     .attr("height", height);
+        .on("tick", tick)
+        .linkDistance(function(d) { return d.target._children ? 80 : 40; });
 
     var link = svg.selectAll(".link"),
         node = svg.selectAll(".node");
 
-    // d3.json("readme.json", function(error, json) {
-    //   if (error) throw error;
-    //
-    //   root = json;
-    //   update();
-    // });
 
     function update() {
         var nodes = flatten(root),
-        // var nodes = data;
             links = d3.layout.tree().links(nodes);
 
         // Restart the force layout.
@@ -59,7 +54,7 @@ function treeflower(data, treeified_data, metrics) {
             .attr("y2", function(d) { return d.target.y; });
 
         // Update the nodes…
-        node = node.data(nodes, function(d) { return d.id; }).style("fill", color);
+        node = node.data(nodes, function(d) { return d.id; });
 
         // Exit any old nodes.
         node.exit().remove();
@@ -73,11 +68,16 @@ function treeflower(data, treeified_data, metrics) {
             .attr("r", function(d) {
                 return rscale(PMV.getMetric(d, metrics.width));
             })
-            .style("fill", color)
             .on("click", click)
             .call(force.drag)
             .call(tooltip());
-      }
+        svg.selectAll("circle")
+            .attr("stroke", function(d) {
+                return d.children ? "#c6dbef" : d._children ? "red" : "#c6dbef";
+            })
+            .style("fill", function(d) { return "hsl(" + fscale(PMV.getMetric(d, metrics.color)) + ", 80%, 50%)" })
+
+    }
 
     function tick() {
         link.attr("x1", function(d) { return d.source.x; })
@@ -89,14 +89,9 @@ function treeflower(data, treeified_data, metrics) {
             .attr("cy", function(d) { return d.y; });
     }
 
-    // Color leaf nodes orange, and packages white or blue.
-    function color(d) {
-        return d._children ? "#3182bd" : d.children ? "#c6dbef" : "#fd8d3c";
-    }
-
     // Toggle children on click.
     function click(d) {
-        if (!d3.event.defaultPrevented) {
+        // if (!d3.event.defaultPrevented) {
             if (d.children) {
               d._children = d.children;
               d.children = null;
@@ -105,7 +100,7 @@ function treeflower(data, treeified_data, metrics) {
               d._children = null;
             }
             update();
-        }
+        // }
     }
 
     // Returns a list of all nodes under the root.
@@ -121,6 +116,18 @@ function treeflower(data, treeified_data, metrics) {
       recurse(root);
       return nodes;
     }
+
+    function collapse(d) {
+        if (d.children && d.children.length == 0) {
+            d.children = null;
+        }
+        if (d.children) {
+            d._children = d.children;
+            d._children.forEach(collapse);
+            d.children = null;
+        }
+    }
     root = treeData;
+    collapse(root);
     update();
 }
