@@ -22,7 +22,7 @@ function treemap(data, metrics) {
         .range([100,20]);
 
     var layout = d3.layout.treemap()
-    	.size([1000, 1000])
+    	.size([viewerWidth, viewerHeight])
     	.padding(3)
     	.mode("squarify")
     	.round(true)
