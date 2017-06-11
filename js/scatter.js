@@ -1,7 +1,7 @@
 function drawcolorbar(){
 
     var w = 80
-    var h = 200
+    var h = 130
 
     //d3.selectAll("svg").remove();
     var svg = d3.select("#colorbar")
