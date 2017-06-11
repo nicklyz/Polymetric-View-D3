@@ -1,7 +1,7 @@
-function tree(data, metrics) {
+function tree(data, treeified_data, metrics) {
     // build hierachy data
-    var roots = PMV.treeify(data);
-    var treeData = roots.length == 1 ? roots : {"name": "root", "children": roots};
+    // var roots = PMV.treeify(data);
+    var treeData = treeified_data.length == 1 ? treeified_data : {"name": "root", "children": treeified_data};
     var wmax = d3.max(data, function(d) { return PMV.getMetric(d, metrics.width) });
     var hmax = d3.max(data, function(d) { return PMV.getMetric(d, metrics.height) });
     var wscale = d3.scale.linear()
@@ -134,7 +134,7 @@ function tree(data, metrics) {
         if (d3.event.defaultPrevented) return; // click suppressed
         d = toggleChildren(d);
         update(d);
-        centerNode(d);
+        // centerNode(d);
     }
 
     function update(source) {
@@ -315,5 +315,5 @@ function tree(data, metrics) {
 
     // Layout the tree initially and center on the root node.
     update(root);
-    centerNode(root);
+    // centerNode(root);
 }

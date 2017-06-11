@@ -8,6 +8,7 @@ spec.layouts = [		// add more plot types here
 	{name: 'checker', title: 'Checker Plot', dimensions: ['width', 'height', 'color', 'sort']},
 ];
 var parsed_data = null;
+var treeified_data = null;
 
 spec.views = [
 	{name: 'custom', title: 'Custom View'},
@@ -25,7 +26,7 @@ function parseFile() {
 		var reader = new FileReader();
 
 		reader.onload = function(e) {
-			
+
 			$('#loading').show();
 			setTimeout(function() {
 		        var result = MSE.parse(reader.result)
@@ -179,10 +180,11 @@ function redraw(data) {
 	  }
 	];
 	if (data != undefined) {
-		console.log("hello");
+		console.log("new data");
 		parsed_data = data;
+		treeified_data = PMV.treeify(data);
 	}
-	if (parsed_data == undefined) {
+	if (parsed_data == undefined || treeified_data == undefined) {
 		return;
 	}
 
@@ -202,13 +204,16 @@ function redraw(data) {
 			scatter(parsed_data, metrics);
 			break;
 		case 'tree':
-			tree(parsed_data, metrics);
+			tree(parsed_data, treeified_data, metrics);
 			break;
 		case 'treemap':
-			treemap(parsed_data, metrics);
+			treemap(parsed_data, treeified_data, metrics);
 			break;
 		case 'checker':
 			checker(parsed_data, metrics);
+			break;
+		case 'codeflower':
+			codeFlower(parsed_data, metrics);
 			break;
 		default:
 	}
