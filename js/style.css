@@ -81,3 +81,34 @@ div.tooltip {
   stroke: #333;
   stroke-width: 0.5px;
 }
+
+.treeflower.node {
+  cursor: pointer;
+  stroke: #3182bd;
+  stroke-width: 1.5px;
+}
+
+.treeflower.link {
+  fill: none;
+  stroke: #9ecae1;
+  stroke-width: 1.5px;
+}
+
+.tree.node {
+  cursor: pointer;
+}
+
+.overlay{
+	background-color:#EEE;
+}
+
+.tree.node text {
+  font-size:10px;
+  font-family:sans-serif;
+}
+
+.tree.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 0.5px;
+}

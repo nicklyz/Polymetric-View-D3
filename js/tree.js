@@ -178,7 +178,7 @@ function tree(data, treeified_data, metrics) {
         // Enter any new nodes at the parent's previous position.
         var nodeEnter = node.enter().append("g")
             // .call(dragListener)
-            .attr("class", "node")
+            .attr("class", "tree node")
             .attr("transform", function(d) {
                 return "translate(" + source.y0 + "," + source.x0 + ")";
             })
@@ -192,8 +192,6 @@ function tree(data, treeified_data, metrics) {
             .attr("height", function (d) {
                 return hscale(PMV.getMetric(d, metrics.height));
             })
-            .attr("stroke", "black")
-            .attr("stroke-width", 0.5)
             .style("fill", function(d) {
                 return d._children ? "lightsteelblue" : "#fff";
             });
@@ -201,8 +199,9 @@ function tree(data, treeified_data, metrics) {
         // Change the circle  depending on whether it has children and is collapsed
         node.select("rect.nodeRect")
             .attr("stroke", function(d) {
-                return d._children ? "red" : "black";
+                return d._children ? "red" : "steelblue";
             })
+            .attr("stroke-width", 0.5)
             .style("fill", function(d) { return "hsl(200, 80%, " + fscale(PMV.getMetric(d, metrics.color)) + "%)" })
             .call(tooltip());
 
@@ -228,8 +227,8 @@ function tree(data, treeified_data, metrics) {
           .attr("height", function (d) {
             return hscale(PMV.getMetric(d, metrics.height));
           })
-          .attr("stroke", "black")
-          .attr("stroke-width", 1);
+        //   .attr("stroke", "black")
+        //   .attr("stroke-width", 1);
 
         // Update the links…
         var link = svgGroup.selectAll("path.link")
@@ -239,7 +238,7 @@ function tree(data, treeified_data, metrics) {
 
         // Enter any new links at the parent's previous position.
         link.enter().insert("path", "g")
-            .attr("class", "link")
+            .attr("class", "tree link")
             .attr("d", function(d) {
                 var o = {
                     x: source.x0,
