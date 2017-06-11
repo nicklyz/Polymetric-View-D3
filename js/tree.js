@@ -1,7 +1,7 @@
-function tree(data, metrics) {
+function tree(data, treeified_data, metrics) {
     // build hierachy data
-    var roots = PMV.treeify(data);
-    var treeData = roots.length == 1 ? roots : {"name": "root", "children": roots};
+    // var roots = PMV.treeify(data);
+    var treeData = treeified_data.length == 1 ? treeified_data : {"name": "root", "children": treeified_data};
     var wmax = d3.max(data, function(d) { return PMV.getMetric(d, metrics.width) });
     var hmax = d3.max(data, function(d) { return PMV.getMetric(d, metrics.height) });
     var wscale = d3.scale.linear()
@@ -134,7 +134,7 @@ function tree(data, metrics) {
         if (d3.event.defaultPrevented) return; // click suppressed
         d = toggleChildren(d);
         update(d);
-        centerNode(d);
+        // centerNode(d);
     }
 
     function update(source) {
@@ -156,8 +156,7 @@ function tree(data, metrics) {
         childCount(0, root);
         var newHeight = d3.max(levelWidth) * 25; // 25 pixels per line
         // console.log(newHeight);
-        // tree = tree.size([newHeight, viewerWidth]);
-        tree = tree.size([viewerHeight, viewerWidth]);
+        tree = tree.size([newHeight, viewerWidth]);
         // Compute the new tree layout.
         var nodes = tree.nodes(root).reverse(),
             links = tree.links(nodes);
@@ -194,7 +193,7 @@ function tree(data, metrics) {
                 return hscale(PMV.getMetric(d, metrics.height));
             })
             .attr("stroke", "black")
-            .attr("stroke-width", 1)
+            .attr("stroke-width", 0.5)
             .style("fill", function(d) {
                 return d._children ? "lightsteelblue" : "#fff";
             });
@@ -204,7 +203,8 @@ function tree(data, metrics) {
             .attr("stroke", function(d) {
                 return d._children ? "red" : "black";
             })
-            .style("fill", function(d) { return "hsl(200, 80%, " + fscale(PMV.getMetric(d, metrics.color)) + "%)" });
+            .style("fill", function(d) { return "hsl(200, 80%, " + fscale(PMV.getMetric(d, metrics.color)) + "%)" })
+            .call(tooltip());
 
         // Transition nodes to their new position.
         var nodeUpdate = node.transition()
@@ -308,12 +308,12 @@ function tree(data, metrics) {
     root.x0 = viewerHeight / 2;
     root.y0 = 0;
 
-	// Expand all children of roots children before rendering.
+	// collapse all children of roots children before rendering.
 	// root.children.forEach(function(child){
 	// 	collapse(child);
 	// });
 
     // Layout the tree initially and center on the root node.
     update(root);
-    centerNode(root);
+    // centerNode(root);
 }

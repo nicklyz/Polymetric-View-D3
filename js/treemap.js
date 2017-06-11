@@ -1,6 +1,6 @@
-function treemap(data, metrics) {
-    var roots = PMV.treeify(data);
-    var treeData = roots.length == 1 ? roots : {"id": -1, "name": "root", "children": roots};
+function treemap(data, treeified_data, metrics) {
+    // var roots = PMV.treeify(data);
+    var treeData = treeified_data.length == 1 ? treeified_data : {"name": "root", "children": treeified_data};
     var root = d3.hierarchy(treeData)
       .sum(function(d) {
           return PMV.getMetric(d, metrics.sort);
