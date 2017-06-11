@@ -218,4 +218,5 @@ function redraw(data) {
 			break;
 		default:
 	}
+	drawcolorbar();
 }
