@@ -6,6 +6,7 @@ spec.layouts = [		// add more plot types here
 	{name: 'tree', title: 'Tree Plot', dimensions: ['width', 'height', 'color']},
 	{name: 'treemap', title: 'Tree Map', dimensions: ['color', 'sort']},
 	{name: 'checker', title: 'Checker Plot', dimensions: ['width', 'height', 'color', 'sort']},
+	{name: 'treeflower', title: 'Tree Flower', dimensions: ['width', 'color']},
 ];
 var parsed_data = null;
 var treeified_data = null;
@@ -212,8 +213,8 @@ function redraw(data) {
 		case 'checker':
 			checker(parsed_data, metrics);
 			break;
-		case 'codeflower':
-			codeFlower(parsed_data, metrics);
+		case 'treeflower':
+			treeflower(parsed_data, treeified_data, metrics);
 			break;
 		default:
 	}
