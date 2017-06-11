@@ -30,6 +30,7 @@ function checker(data, metrics) {
 
 
 	d3.selectAll("svg").remove();
+	drawcolorbar()
 
 	var chart = d3.select("#body").append("svg")
     .attr("class", "chart")

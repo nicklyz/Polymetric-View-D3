@@ -1,3 +1,72 @@
+function drawcolorbar(){
+
+    var w = 1000
+    var h = 35
+
+    d3.selectAll("svg").remove();
+    var svg = d3.select("#colorbar")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+
+    var defs = svg.append("defs");
+
+//Append a linearGradient element to the defs and give it a unique id
+    var linearGradient = defs.append("linearGradient")
+    .attr("id", "linear-gradient");
+
+    //Horizontal gradient
+    linearGradient
+    .attr("x1", "0%")
+    .attr("y1", "0%")
+    .attr("x2", "100%")
+    .attr("y2", "0%");
+
+
+    linearGradient.selectAll("stop") 
+    .data([ 
+        {offset: "0%", color: "hsl(200, 80%, 50%)"}, 
+        {offset: "12.5%", color: "hsl(175, 80%, 50%)"},
+        {offset: "25%", color: "hsl(150, 80%, 50%)"}, 
+        {offset: "37.5%", color: "hsl(125, 80%, 50%)"},
+        {offset: "50%", color: "hsl(100, 80%, 50%)"}, 
+        {offset: "62.5%", color: "hsl(75, 80%, 50%)"},
+        {offset: "75%", color: "hsl(50, 80%, 50%)"}, 
+        {offset: "87.5%", color: "hsl(25, 80%, 50%)"}, 
+        {offset: "100%", color: "hsl(0, 80%, 50%)"}
+      ])  
+
+    .enter().append("stop")
+    .attr("offset", function(d) { return d.offset; })   
+    .attr("stop-color", function(d) { return d.color; });
+ 
+
+    svg.append("rect")
+    .attr("width", 300)
+    .attr("height", 20)
+    .attr("x",100)
+    .style("fill", "url(#linear-gradient)");
+
+    svg.append("text")
+    .attr("x", 90)
+    .attr("y", 30)
+    .text("0")
+    .attr("font-family", "sans-serif")
+    .attr("font-size", "20px")
+    .attr("fill", "blue");
+
+
+    svg.append("text")
+    .attr("x", 400)
+    .attr("y", 30)
+    .text("200")
+    .attr("font-family", "sans-serif")
+    .attr("font-size", "20px")
+    .attr("fill", "red");
+}
+
+
+
 function scatter(data, metrics){
 
     var w = 1000,
@@ -6,6 +75,8 @@ function scatter(data, metrics){
         left_pad = 100;
 
     d3.selectAll("svg").remove();
+
+    drawcolorbar()
 
     var svg = d3.select("#body")
             .append("svg")
@@ -70,15 +141,6 @@ function scatter(data, metrics){
         //.style("fill", function(d) { return "hsl(200, 80%, " + fscale(PMV.getMetric(d, metrics.color)) + "%)" })
         .style("fill", function(d) { return "hsl(" + fscale(PMV.getMetric(d, metrics.color)) + ", 80%, 50%)" })
         .call(tooltip())
-
-
-
-
-
-
-
-
-
 
 
 }
