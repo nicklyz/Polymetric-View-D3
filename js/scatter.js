@@ -1,6 +1,6 @@
 function drawcolorbar(){
 
-    var w = 80
+    var w = 120
     var h = 130
 
     //d3.selectAll("svg").remove();
@@ -59,7 +59,7 @@ function drawcolorbar(){
     svg.append("text")
     .attr("x", 25)
     .attr("y", 120)
-    .text("200")
+    .text("200 pixels")
     .attr("font-family", "sans-serif")
     .attr("font-size", "20px")
     .attr("fill", "red");
