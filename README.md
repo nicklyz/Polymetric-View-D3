@@ -38,7 +38,7 @@ The project page can be found [**here**](https://nicklyz.github.io/Polymetric-Vi
 * BOvR:             Base Class Overriding Rate    
 Note: The above parameters are all in class level, since our project scope does not dive into method details
 
-## Avaliable Attributes Parameter in Each Layout:
+## Avaliable Attribute Parameters in Each Layout:
 * position-x:  X position representation of each rectangle/node/circle, only avaliable in Checker Plot
 * position-y:  Y position representation of each rectangle/node/circle, only avaliable in Checker Plot
 * width:       Width representation of each rectangle/node/circle, avaliable in all layouts
