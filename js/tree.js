@@ -85,6 +85,9 @@ function tree(data, treeified_data, metrics) {
     // Helper functions for collapsing and expanding nodes.
 
     function collapse(d) {
+        if (d.children && d.children.length == 0) {
+            d.children = null;
+        }
         if (d.children) {
             d._children = d.children;
             d._children.forEach(collapse);
