@@ -18,6 +18,8 @@ Our project is a replication of existing tool developed by Michele Lanza and Ste
 Our goal is to be able to display a selection of polymatric view layouts given a MSE file for a Java project.  
 
 The project page can be found [**here**](https://nicklyz.github.io/Polymetric-View-D3/index.html)
+
+Our project report can be found here [**here**](https://drive.google.com/a/g.ucla.edu/file/d/0B22n1z99jyZrUFkxY20yRHRCRFk/view?usp=sharing)
     
 ## Current layouts avaliable are:  
 * Tree Plot:        Traditional tree plot that maps classes and their dependencies to rectangle tree nodes and hierarchies with a maximum of three parameters to display   
