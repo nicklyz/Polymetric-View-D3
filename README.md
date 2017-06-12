@@ -5,7 +5,7 @@
 ## Team Member & Contributers:
 Yanzhe Liu		nikeliuyanzhe@gmail.com   
 Mushi Zhou		zmushi@gmail.com       
-Quanjie Geng    scmun.gengqj@gmail.com   
+Quanjie Geng    szmun.gengqj@gmail.com   
 Xiao Yan        yanxiao0201@ucla.edu    
 Daniel Lau      daniel.s.lau@gmail.com    
 
