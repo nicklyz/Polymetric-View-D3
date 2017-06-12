@@ -5,7 +5,7 @@
 ## Team Member & Contributers:
 Yanzhe Liu		nikeliuyanzhe@gmail.com   
 Mushi Zhou		zmushi@gmail.com       
-Quanjie Geng    scmun.gengqj@gmail.com   
+Quanjie Geng    szmun.gengqj@gmail.com   
 Xiao Yan        yanxiao0201@ucla.edu    
 Daniel Lau      daniel.s.lau@gmail.com    
 
@@ -39,10 +39,10 @@ The project page can be found [**here**](https://nicklyz.github.io/Polymetric-Vi
 Note: The above parameters are all in class level, since our project scope does not dive into method details
 
 ## Avaliable Attribute Parameters in Each Layout:
-* position-x:  X position representation of each rectangle/node/circle, only avaliable in Checker Plot
-* position-y:  Y position representation of each rectangle/node/circle, only avaliable in Checker Plot
-* width:       Width representation of each rectangle/node/circle, avaliable in all layouts
-* height:      Height representation of each rectangle/node/circle, not avaliable in Iteractive Tree
+* position-x:  X position representation of each rectangle/node/circle, only avaliable in Scatter Plot
+* position-y:  Y position representation of each rectangle/node/circle, only avaliable in Scatter Plot
+* width:       Width representation of each rectangle/node/circle, Not avaliable in Tree Map
+* height:      Height representation of each rectangle/node/circle, not avaliable in Iteractive Tree and Tree Map
 * color:       Range of color representation of each rectangle/node/circle, avaliable in all layouts
 * sort:        The parameter we use to sort rectangles/nodes/circles, only avaliable in Checker Plot and Tree Map
 

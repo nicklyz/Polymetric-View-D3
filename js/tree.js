@@ -6,15 +6,15 @@ function tree(data, treeified_data, metrics) {
     var hmax = d3.max(data, function(d) { return PMV.getMetric(d, metrics.height) });
     var wscale = d3.scale.linear()
         .domain([0, wmax])
-        .rangeRound([5, 50]);
+        .rangeRound([10, 75]);
 
     var hscale = d3.scale.linear()
         .domain([0, hmax])
-        .rangeRound([5, 50]);
+        .rangeRound([10, 75]);
 
     var fscale = d3.scale.linear()
         .domain([0, d3.max(data, function (d) { return PMV.getMetric(d, metrics.color); })])
-        .range([100,0]);
+        .range([200,0]);
 
     // Calculate total nodes, max label length
     var totalNodes = 0;
@@ -312,9 +312,9 @@ function tree(data, treeified_data, metrics) {
     root.y0 = 0;
 
 	// collapse all children of roots children before rendering.
-	root.children.forEach(function(child){
-		collapse(child);
-	});
+	// root.children.forEach(function(child){
+	// 	collapse(child);
+	// });
 
     // Layout the tree initially and center on the root node.
     update(root);

@@ -23,23 +23,23 @@ function drawcolorbar(){
     .attr("y2", "100%");
 
 
-    linearGradient.selectAll("stop") 
-    .data([ 
-        {offset: "0%", color: "hsl(200, 80%, 50%)"}, 
+    linearGradient.selectAll("stop")
+    .data([
+        {offset: "0%", color: "hsl(200, 80%, 50%)"},
         {offset: "12.5%", color: "hsl(175, 80%, 50%)"},
-        {offset: "25%", color: "hsl(150, 80%, 50%)"}, 
+        {offset: "25%", color: "hsl(150, 80%, 50%)"},
         {offset: "37.5%", color: "hsl(125, 80%, 50%)"},
-        {offset: "50%", color: "hsl(100, 80%, 50%)"}, 
+        {offset: "50%", color: "hsl(100, 80%, 50%)"},
         {offset: "62.5%", color: "hsl(75, 80%, 50%)"},
-        {offset: "75%", color: "hsl(50, 80%, 50%)"}, 
-        {offset: "87.5%", color: "hsl(25, 80%, 50%)"}, 
+        {offset: "75%", color: "hsl(50, 80%, 50%)"},
+        {offset: "87.5%", color: "hsl(25, 80%, 50%)"},
         {offset: "100%", color: "hsl(0, 80%, 50%)"}
-      ])  
+      ])
 
     .enter().append("stop")
-    .attr("offset", function(d) { return d.offset; })   
+    .attr("offset", function(d) { return d.offset; })
     .attr("stop-color", function(d) { return d.color; });
- 
+
 
     svg.append("rect")
     .attr("width", 20)
@@ -50,7 +50,7 @@ function drawcolorbar(){
     svg.append("text")
     .attr("x", 25)
     .attr("y", 15)
-    .text("0")
+    // .text("0")
     .attr("font-family", "sans-serif")
     .attr("font-size", "20px")
     .attr("fill", "blue");
@@ -59,7 +59,7 @@ function drawcolorbar(){
     svg.append("text")
     .attr("x", 25)
     .attr("y", 120)
-    .text("200 pixels")
+    // .text("200 pixels")
     .attr("font-family", "sans-serif")
     .attr("font-size", "20px")
     .attr("fill", "red");
@@ -144,4 +144,3 @@ function scatter(data, metrics){
 
 
 }
-
