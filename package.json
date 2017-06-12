@@ -1,0 +1,24 @@
+{
+  "name": "Polymetric-View-D3",
+  "version": "1.0.0",
+  "description": "test2 CS 230 Project",
+  "main": "index.js",
+  "dependencies": {
+    "d3-hierarchy": "^1.1.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicklyz/Polymetric-View-D3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nicklyz/Polymetric-View-D3/issues"
+  },
+  "homepage": "https://github.com/nicklyz/Polymetric-View-D3#readme"
+}
