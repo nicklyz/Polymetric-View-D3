@@ -191,10 +191,10 @@ function tree(data, treeified_data, metrics) {
             })
             .attr("height", function (d) {
                 return hscale(PMV.getMetric(d, metrics.height));
-            })
-            .style("fill", function(d) {
-                return d._children ? "lightsteelblue" : "#fff";
             });
+            // .style("fill", function(d) {
+            //     return d._children ? "lightsteelblue" : "#fff";
+            // });
 
         // Change the circle  depending on whether it has children and is collapsed
         node.select("rect.nodeRect")
@@ -202,7 +202,8 @@ function tree(data, treeified_data, metrics) {
                 return d._children ? "red" : "steelblue";
             })
             .attr("stroke-width", 0.5)
-            .style("fill", function(d) { return "hsl(200, 80%, " + fscale(PMV.getMetric(d, metrics.color)) + "%)" })
+            // .style("fill", function(d) { return "hsl(200, 80%, " + fscale(PMV.getMetric(d, metrics.color)) + "%)" })
+            .style("fill", function(d) { return "hsl(" + fscale(PMV.getMetric(d, metrics.color)) + ", 80%, 50%)" })
             .call(tooltip());
 
         // Transition nodes to their new position.
@@ -308,9 +309,9 @@ function tree(data, treeified_data, metrics) {
     root.y0 = 0;
 
 	// collapse all children of roots children before rendering.
-	// root.children.forEach(function(child){
-	// 	collapse(child);
-	// });
+	root.children.forEach(function(child){
+		collapse(child);
+	});
 
     // Layout the tree initially and center on the root node.
     update(root);
