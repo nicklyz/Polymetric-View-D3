@@ -128,6 +128,8 @@ function treeflower(data, treeified_data, metrics) {
         }
     }
     root = treeData;
-    collapse(root);
+    root.children.forEach(function(child){
+		collapse(child);
+	});
     update();
 }
